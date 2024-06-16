@@ -1,20 +1,10 @@
 #include "lexer.h"
+#include "lexer_utils.h"
 #include "token.h"
 
 namespace lexer {
 
 Lexer::Lexer(std::string input) : m_input{std::move(input)} { ReadChar(); }
-
-auto Lexer::ReadChar() -> void {
-  if (m_read_position >= m_input.size()) {
-    m_ch = 0;
-  } else {
-    m_ch = m_input[m_read_position];
-  }
-
-  m_position = m_read_position;
-  m_read_position++;
-}
 
 auto Lexer::NextToken() -> Token {
   std::optional<Token> token{};
@@ -48,11 +38,38 @@ auto Lexer::NextToken() -> Token {
       token = Token(TokenType::EoF, {});
       break;
     default:
+      if (is_ascii_letter(m_ch)) {
+        return Token(TokenType::Ident, ReadIdentifier());
+      }
+
       token = Token(TokenType::Illegal, {});
   };
 
   ReadChar();
   return *token;
+}
+
+auto Lexer::ReadChar() -> void {
+  if (m_read_position >= m_input.size()) {
+    m_ch = 0;
+  } else {
+    m_ch = m_input[m_read_position];
+  }
+
+  m_position = m_read_position;
+  m_read_position++;
+}
+
+auto Lexer::ReadIdentifier() -> std::string {
+  auto posiiton = m_position;
+  auto num_chars = 0;
+
+  while (is_ascii_letter(m_ch)) {
+    ReadChar();
+    num_chars++;
+  }
+
+  return m_input.substr(posiiton, num_chars);
 }
 
 }// namespace lexer
