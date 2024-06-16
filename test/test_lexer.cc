@@ -17,7 +17,7 @@ TEST(Lexer, NextToken) {
 
     let add = fn(x, y) {
       x + y;
-    }
+    };
 
     let result = add(five, ten);
   )";
@@ -52,6 +52,7 @@ TEST(Lexer, NextToken) {
       {TokenType::Semicolon, ";"},
 
       {TokenType::RBrace, "}"},
+      {TokenType::Semicolon, ";"},
 
       {TokenType::Let, "let"},
       {TokenType::Ident, "result"},
