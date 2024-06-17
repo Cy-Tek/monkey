@@ -3,6 +3,11 @@
 static const std::map<std::string, TokenType> keywords = {
     {"fn", TokenType::Function},
     {"let", TokenType::Let},
+    {"true", TokenType::True},
+    {"false", TokenType::False},
+    {"if", TokenType::If},
+    {"else", TokenType::Else},
+    {"return", TokenType::Return},
 };
 
 auto lookupIdent(const std::string &ident) -> TokenType {
@@ -64,6 +69,16 @@ auto tokenTypeToString(TokenType type) -> std::string {
       return "FUNCTION";
     case TokenType::Let:
       return "LET";
+    case TokenType::True:
+      return "TRUE";
+    case TokenType::False:
+      return "FALSE";
+    case TokenType::If:
+      return "IF";
+    case TokenType::Else:
+      return "ELSE";
+    case TokenType::Return:
+      return "RETURN";
   }
 }
 

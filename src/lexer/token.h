@@ -36,7 +36,12 @@ enum class TokenType {
   // ── Keywords ────────────────────────────────────────────────────────
 
   Function,
-  Let
+  Let,
+  True,
+  False,
+  If,
+  Else,
+  Return,
 };
 
 auto operator<<(std::ostream &os, TokenType token_type) -> std::ostream &;
