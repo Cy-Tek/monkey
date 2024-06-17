@@ -22,7 +22,10 @@ class Lexer {
   char m_ch = 0;
 
   auto ReadChar() -> void;
+  auto ReadNumber() -> std::string;
   auto ReadIdentifier() -> std::string;
+
+  auto SkipWhitespace() -> void;
 };
 
 }// namespace lexer

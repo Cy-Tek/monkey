@@ -20,6 +20,8 @@ TEST(Lexer, NextToken) {
     };
 
     let result = add(five, ten);
+    !-/*5;
+    5 < 10 > 5;
   )";
 
   std::vector<NextTokenTest> tests{

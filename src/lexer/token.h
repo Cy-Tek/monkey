@@ -40,6 +40,7 @@ enum class TokenType {
 };
 
 auto operator<<(std::ostream &os, TokenType token_type) -> std::ostream &;
+auto lookupIdent(const std::string &ident) -> TokenType;
 
 class Token {
  public:

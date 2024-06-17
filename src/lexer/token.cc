@@ -1,5 +1,18 @@
 #include "token.h"
 
+static const std::map<std::string, TokenType> keywords = {
+    {"fn", TokenType::Function},
+    {"let", TokenType::Let},
+};
+
+auto lookupIdent(const std::string &ident) -> TokenType {
+  if (auto it = keywords.find(ident); it != keywords.end()) {
+    return it->second;
+  }
+
+  return TokenType::Ident;
+}
+
 Token::Token(TokenType type, std::string literal) : m_type{type}, m_literal{std::move(literal)} {}
 
 auto Token::Type() const -> TokenType {

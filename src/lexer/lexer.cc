@@ -9,6 +9,8 @@ Lexer::Lexer(std::string input) : m_input{std::move(input)} { ReadChar(); }
 auto Lexer::NextToken() -> Token {
   std::optional<Token> token{};
 
+  SkipWhitespace();
+
   switch (m_ch) {
     case '=':
       token = Token(TokenType::Assign, std::string{m_ch});
@@ -38,8 +40,15 @@ auto Lexer::NextToken() -> Token {
       token = Token(TokenType::EoF, {});
       break;
     default:
-      if (is_ascii_letter(m_ch)) {
-        return Token(TokenType::Ident, ReadIdentifier());
+      if (isAsciiLetter(m_ch)) {
+        auto literal = ReadIdentifier();
+        auto type = lookupIdent(literal);
+
+        return Token(type, literal);
+      }
+
+      if (isAsciiDigit(m_ch)) {
+        return Token(TokenType::Int, ReadNumber());
       }
 
       token = Token(TokenType::Illegal, {});
@@ -60,16 +69,34 @@ auto Lexer::ReadChar() -> void {
   m_read_position++;
 }
 
+auto Lexer::ReadNumber() -> std::string {
+  auto position = m_position;
+  auto num_chars = 0;
+
+  while (isAsciiDigit(m_ch)) {
+    ReadChar();
+    num_chars++;
+  }
+
+  return m_input.substr(position, num_chars);
+}
+
 auto Lexer::ReadIdentifier() -> std::string {
   auto posiiton = m_position;
   auto num_chars = 0;
 
-  while (is_ascii_letter(m_ch)) {
+  while (isAsciiLetter(m_ch)) {
     ReadChar();
     num_chars++;
   }
 
   return m_input.substr(posiiton, num_chars);
+}
+
+auto Lexer::SkipWhitespace() -> void {
+  while (isAsciiWhitespace(m_ch)) {
+    ReadChar();
+  }
 }
 
 }// namespace lexer
