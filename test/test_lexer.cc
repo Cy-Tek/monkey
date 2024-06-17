@@ -66,6 +66,21 @@ TEST(Lexer, NextToken) {
       {TokenType::Ident, "ten"},
       {TokenType::RParen, ")"},
       {TokenType::Semicolon, ";"},
+
+      {TokenType::Bang, "!"},
+      {TokenType::Minus, "-"},
+      {TokenType::Slash, "/"},
+      {TokenType::Asterisk, "*"},
+      {TokenType::Int, "5"},
+      {TokenType::Semicolon, ";"},
+
+      {TokenType::Int, "5"},
+      {TokenType::LT, "<"},
+      {TokenType::Int, "10"},
+      {TokenType::GT, ">"},
+      {TokenType::Int, "5"},
+      {TokenType::Semicolon, ";"},
+
       {TokenType::EoF, "\0"},
   };
 

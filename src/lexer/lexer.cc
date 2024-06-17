@@ -36,6 +36,24 @@ auto Lexer::NextToken() -> Token {
     case '+':
       token = Token(TokenType::Plus, std::string{m_ch});
       break;
+    case '-':
+      token = Token(TokenType::Minus, std::string{m_ch});
+      break;
+    case '!':
+      token = Token(TokenType::Bang, std::string{m_ch});
+      break;
+    case '/':
+      token = Token(TokenType::Slash, std::string{m_ch});
+      break;
+    case '*':
+      token = Token(TokenType::Asterisk, std::string{m_ch});
+      break;
+    case '<':
+      token = Token(TokenType::LT, std::string{m_ch});
+      break;
+    case '>':
+      token = Token(TokenType::GT, std::string{m_ch});
+      break;
     case '\0':
       token = Token(TokenType::EoF, {});
       break;

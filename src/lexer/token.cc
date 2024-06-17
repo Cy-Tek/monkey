@@ -36,6 +36,18 @@ auto tokenTypeToString(TokenType type) -> std::string {
       return "ASSIGN";
     case TokenType::Plus:
       return "PLUS";
+    case TokenType::Minus:
+      return "MINUS";
+    case TokenType::Bang:
+      return "BANG";
+    case TokenType::Slash:
+      return "SLASH";
+    case TokenType::Asterisk:
+      return "ASTERISK";
+    case TokenType::LT:
+      return "LT";
+    case TokenType::GT:
+      return "GT";
     case TokenType::Comma:
       return "COMMA";
     case TokenType::Semicolon:
@@ -52,8 +64,6 @@ auto tokenTypeToString(TokenType type) -> std::string {
       return "FUNCTION";
     case TokenType::Let:
       return "LET";
-    default:
-      return "UNKNOWN";
   }
 }
 

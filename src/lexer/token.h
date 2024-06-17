@@ -6,34 +6,34 @@ enum class TokenType {
   Illegal,
   EoF,
 
-  // ╭────────────────────────╮
-  // │ Identifiers + literals │
-  // ╰────────────────────────╯
+  // ── Identifiers + literals ──────────────────────────────────────────
 
   Ident,
   Int,
 
-  // ╭───────────╮
-  // │ Operators │
-  // ╰───────────╯
+  // ── Operators ───────────────────────────────────────────────────────
 
   Assign,
   Plus,
+  Minus,
+  Bang,
+  Asterisk,
+  Slash,
 
-  // ╭────────────╮
-  // │ Delimiters │
-  // ╰────────────╯
+  LT,
+  GT,
+
+  // ── Delimiters ──────────────────────────────────────────────────────
 
   Comma,
   Semicolon,
+
   LParen,
   RParen,
   LBrace,
   RBrace,
 
-  // ╭──────────╮
-  // │ Keywords │
-  // ╰──────────╯
+  // ── Keywords ────────────────────────────────────────────────────────
 
   Function,
   Let
