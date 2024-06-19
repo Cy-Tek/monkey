@@ -28,6 +28,9 @@ TEST(Lexer, NextToken) {
     } else {
       return false;
     }
+
+    10 == 10;
+    10 != 9;
   )";
 
   std::vector<NextTokenTest> tests{
@@ -108,6 +111,16 @@ TEST(Lexer, NextToken) {
       {TokenType::Semicolon, ";"},
 
       {TokenType::RBrace, "}"},
+
+      {TokenType::Int, "10"},
+      {TokenType::EQ, "=="},
+      {TokenType::Int, "10"},
+      {TokenType::Semicolon, ";"},
+
+      {TokenType::Int, "10"},
+      {TokenType::NotEq, "!="},
+      {TokenType::Int, "9"},
+      {TokenType::Semicolon, ";"},
 
       {TokenType::EoF, "\0"},
   };

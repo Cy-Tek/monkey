@@ -13,7 +13,13 @@ auto Lexer::NextToken() -> Token {
 
   switch (m_ch) {
     case '=':
-      token = Token(TokenType::Assign, std::string{m_ch});
+      if (PeekChar() == '=') {
+        ReadChar();
+        token = Token(TokenType::EQ, "==");
+      } else {
+        token = Token{TokenType::Assign, std::string{m_ch}};
+      }
+
       break;
     case ';':
       token = Token(TokenType::Semicolon, std::string{m_ch});
@@ -40,7 +46,13 @@ auto Lexer::NextToken() -> Token {
       token = Token(TokenType::Minus, std::string{m_ch});
       break;
     case '!':
-      token = Token(TokenType::Bang, std::string{m_ch});
+      if (PeekChar() == '=') {
+        ReadChar();
+        token = Token(TokenType::NotEq, "!=");
+      } else {
+        token = Token(TokenType::Bang, std::string{m_ch});
+      }
+
       break;
     case '/':
       token = Token(TokenType::Slash, std::string{m_ch});
@@ -109,6 +121,14 @@ auto Lexer::ReadIdentifier() -> std::string {
   }
 
   return m_input.substr(posiiton, num_chars);
+}
+
+auto Lexer::PeekChar() -> char {
+  if (m_read_position >= m_input.size()) {
+    return '\0';
+  }
+
+  return m_input[m_read_position];
 }
 
 auto Lexer::SkipWhitespace() -> void {

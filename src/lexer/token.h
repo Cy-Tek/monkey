@@ -22,6 +22,8 @@ enum class TokenType {
 
   LT,
   GT,
+  EQ,
+  NotEq,
 
   // ── Delimiters ──────────────────────────────────────────────────────
 

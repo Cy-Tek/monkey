@@ -53,6 +53,10 @@ auto tokenTypeToString(TokenType type) -> std::string {
       return "LT";
     case TokenType::GT:
       return "GT";
+    case TokenType::EQ:
+      return "EQ";
+    case TokenType::NotEq:
+      return "NOTEQ";
     case TokenType::Comma:
       return "COMMA";
     case TokenType::Semicolon:
