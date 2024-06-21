@@ -1,6 +1,7 @@
 #include "lexer.h"
-#include "lexer_utils.h"
 #include "token.h"
+
+#include "str_utils.h"
 
 namespace lexer {
 
@@ -15,73 +16,73 @@ auto Lexer::NextToken() -> Token {
     case '=':
       if (PeekChar() == '=') {
         ReadChar();
-        token = Token(TokenType::EQ, "==");
+        token = Token{TokenType::EQ, "=="};
       } else {
         token = Token{TokenType::Assign, std::string{m_ch}};
       }
 
       break;
     case ';':
-      token = Token(TokenType::Semicolon, std::string{m_ch});
+      token = Token{TokenType::Semicolon, std::string{m_ch}};
       break;
     case ',':
-      token = Token(TokenType::Comma, std::string{m_ch});
+      token = Token{TokenType::Comma, std::string{m_ch}};
       break;
     case '(':
-      token = Token(TokenType::LParen, std::string{m_ch});
+      token = Token{TokenType::LParen, std::string{m_ch}};
       break;
     case ')':
-      token = Token(TokenType::RParen, std::string{m_ch});
+      token = Token{TokenType::RParen, std::string{m_ch}};
       break;
     case '{':
-      token = Token(TokenType::LBrace, std::string{m_ch});
+      token = Token{TokenType::LBrace, std::string{m_ch}};
       break;
     case '}':
-      token = Token(TokenType::RBrace, std::string{m_ch});
+      token = Token{TokenType::RBrace, std::string{m_ch}};
       break;
     case '+':
-      token = Token(TokenType::Plus, std::string{m_ch});
+      token = Token{TokenType::Plus, std::string{m_ch}};
       break;
     case '-':
-      token = Token(TokenType::Minus, std::string{m_ch});
+      token = Token{TokenType::Minus, std::string{m_ch}};
       break;
     case '!':
       if (PeekChar() == '=') {
         ReadChar();
-        token = Token(TokenType::NotEq, "!=");
+        token = Token{TokenType::NotEq, "!="};
       } else {
-        token = Token(TokenType::Bang, std::string{m_ch});
+        token = Token{TokenType::Bang, std::string{m_ch}};
       }
 
       break;
     case '/':
-      token = Token(TokenType::Slash, std::string{m_ch});
+      token = Token{TokenType::Slash, std::string{m_ch}};
       break;
     case '*':
-      token = Token(TokenType::Asterisk, std::string{m_ch});
+      token = Token{TokenType::Asterisk, std::string{m_ch}};
       break;
     case '<':
-      token = Token(TokenType::LT, std::string{m_ch});
+      token = Token{TokenType::LT, std::string{m_ch}};
       break;
     case '>':
-      token = Token(TokenType::GT, std::string{m_ch});
+      token = Token{TokenType::GT, std::string{m_ch}};
       break;
     case '\0':
-      token = Token(TokenType::EoF, {});
+      token = Token{TokenType::EoF, {}};
       break;
     default:
-      if (isAsciiLetter(m_ch)) {
+      if (utils::isAsciiLetter(m_ch)) {
         auto literal = ReadIdentifier();
         auto type = lookupIdent(literal);
 
-        return Token(type, literal);
+        return Token{type, literal};
       }
 
-      if (isAsciiDigit(m_ch)) {
-        return Token(TokenType::Int, ReadNumber());
+      if (utils::isAsciiDigit(m_ch)) {
+        return Token{TokenType::Int, ReadNumber()};
       }
 
-      token = Token(TokenType::Illegal, {});
+      token = Token{TokenType::Illegal, {}};
   };
 
   ReadChar();
@@ -103,7 +104,7 @@ auto Lexer::ReadNumber() -> std::string {
   auto position = m_position;
   auto num_chars = 0;
 
-  while (isAsciiDigit(m_ch)) {
+  while (utils::isAsciiDigit(m_ch)) {
     ReadChar();
     num_chars++;
   }
@@ -115,7 +116,7 @@ auto Lexer::ReadIdentifier() -> std::string {
   auto posiiton = m_position;
   auto num_chars = 0;
 
-  while (isAsciiLetter(m_ch)) {
+  while (utils::isAsciiLetter(m_ch)) {
     ReadChar();
     num_chars++;
   }
@@ -132,7 +133,7 @@ auto Lexer::PeekChar() -> char {
 }
 
 auto Lexer::SkipWhitespace() -> void {
-  while (isAsciiWhitespace(m_ch)) {
+  while (utils::isAsciiWhitespace(m_ch)) {
     ReadChar();
   }
 }
