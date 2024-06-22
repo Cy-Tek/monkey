@@ -19,6 +19,7 @@ auto lookupIdent(const std::string &ident) -> TokenType {
 }
 
 Token::Token(TokenType type, std::string literal) : m_type{type}, m_literal{std::move(literal)} {}
+Token::Token(Token &&other) : m_type{other.m_type}, m_literal{std::move(other.m_literal)} {}
 
 auto Token::Type() const -> TokenType {
   return m_type;

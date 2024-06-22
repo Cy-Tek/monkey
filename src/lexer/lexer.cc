@@ -72,8 +72,8 @@ auto Lexer::NextToken() -> Token {
       break;
     default:
       if (utils::isAsciiLetter(m_ch)) {
-        auto literal = ReadIdentifier();
-        auto type = lookupIdent(literal);
+        const auto literal = ReadIdentifier();
+        const auto type = lookupIdent(literal);
 
         return Token{type, literal};
       }
@@ -113,7 +113,7 @@ auto Lexer::ReadNumber() -> std::string {
 }
 
 auto Lexer::ReadIdentifier() -> std::string {
-  auto posiiton = m_position;
+  const auto posiiton = m_position;
   auto num_chars = 0;
 
   while (utils::isAsciiLetter(m_ch)) {

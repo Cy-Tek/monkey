@@ -53,6 +53,7 @@ class Token {
  public:
   Token() = delete;
   Token(TokenType type, std::string literal);
+  Token(Token &&other);
 
   auto Type() const -> TokenType;
   auto Literal() const -> const std::string &;
