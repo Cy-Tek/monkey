@@ -7,8 +7,11 @@
 namespace ast {
 
 class LetStatment : public Statement {
+  LetStatment() = default;
   LetStatment(Token token, Identifier name, std::unique_ptr<Expression> value);
+
   LetStatment(LetStatment &&other);
+  auto operator=(LetStatment &&other) noexcept -> LetStatment &;
 
   auto TokenLiteral() const -> std::string override;
 

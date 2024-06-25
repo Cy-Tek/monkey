@@ -2,12 +2,12 @@
 
 namespace ast {
 
-auto Program::tokenLiteral() const -> std::string {
+auto Program::TokenLiteral() const -> std::string {
   if (!m_statements.empty()) {
-    return m_statements[0]->tokenLiteral();
+    return m_statements[0]->TokenLiteral();
   }
 
   return "";
 }
 
-} // namespace ast
+}// namespace ast

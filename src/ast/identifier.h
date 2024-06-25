@@ -7,8 +7,11 @@ namespace ast {
 
 class Identifier : public Expression {
  public:
+  Identifier() = default;
   Identifier(Token token, std::string value);
+
   Identifier(Identifier &&other);
+  auto operator=(Identifier &&other) -> Identifier &;
 
   auto TokenLiteral() const -> std::string override;
 

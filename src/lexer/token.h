@@ -51,9 +51,14 @@ auto lookupIdent(const std::string &ident) -> TokenType;
 
 class Token {
  public:
-  Token() = delete;
+  Token();
   Token(TokenType type, std::string literal);
+
   Token(Token &&other);
+  auto operator=(Token &&other) -> Token &;
+
+  Token(Token const &other) = default;
+  auto operator=(Token const &other) -> Token & = default;
 
   auto Type() const -> TokenType;
   auto Literal() const -> const std::string &;

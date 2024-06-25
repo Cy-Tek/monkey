@@ -102,14 +102,12 @@ auto Lexer::ReadChar() -> void {
 
 auto Lexer::ReadNumber() -> std::string {
   auto position = m_position;
-  auto num_chars = 0;
 
   while (utils::isAsciiDigit(m_ch)) {
     ReadChar();
-    num_chars++;
   }
 
-  return m_input.substr(position, num_chars);
+  return m_input.substr(position, m_position - position);
 }
 
 auto Lexer::ReadIdentifier() -> std::string {

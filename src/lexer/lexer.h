@@ -6,12 +6,13 @@ namespace lexer {
 
 class Lexer {
  public:
+  Lexer() = delete;
+  explicit Lexer(std::string input);
+
   Lexer(const Lexer &) = delete;
   Lexer(Lexer &&) = delete;
   Lexer &operator=(const Lexer &) = delete;
   Lexer &operator=(Lexer &&) = delete;
-
-  explicit Lexer(std::string input);
 
   auto NextToken() -> Token;
 
