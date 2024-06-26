@@ -25,4 +25,8 @@ auto LetStatment::operator=(LetStatment &&other) noexcept -> LetStatment & {
   return *this;
 }
 
+auto LetStatment::TokenLiteral() const -> std::string {
+  return this->m_token.Literal();
+}
+
 }// namespace ast

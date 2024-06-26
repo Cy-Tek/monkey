@@ -3,11 +3,6 @@
 
 #include <gtest/gtest.h>
 
-struct NextTokenTest {
-  TokenType expected_type;
-  std::string expected_literal;
-};
-
 TEST(Lexer, NextToken) {
   using namespace lexer;
 
@@ -33,7 +28,12 @@ TEST(Lexer, NextToken) {
     10 != 9;
   )";
 
-  std::vector<NextTokenTest> tests{
+  struct Test {
+    TokenType expected_type;
+    std::string expected_literal;
+  };
+
+  std::vector<Test> tests{
       {TokenType::Let, "let"},
       {TokenType::Ident, "five"},
       {TokenType::Assign, "="},

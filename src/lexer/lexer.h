@@ -11,8 +11,8 @@ class Lexer {
 
   Lexer(const Lexer &) = delete;
   Lexer(Lexer &&) = delete;
-  Lexer &operator=(const Lexer &) = delete;
-  Lexer &operator=(Lexer &&) = delete;
+  auto operator=(const Lexer &) -> Lexer & = delete;
+  auto operator=(Lexer &&) -> Lexer & = delete;
 
   auto NextToken() -> Token;
 
