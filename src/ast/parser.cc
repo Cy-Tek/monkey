@@ -8,6 +8,7 @@ Parser::Parser(std::string input) : m_lexer{input} {
 }
 
 auto Parser::ParseProgram() -> Program {
+  return {};
 }
 
 auto Parser::NextToken() -> void {

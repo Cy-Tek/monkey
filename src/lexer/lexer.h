@@ -26,7 +26,7 @@ class Lexer {
   auto ReadNumber() -> std::string;
   auto ReadIdentifier() -> std::string;
 
-  auto PeekChar() -> char;
+  [[nodiscard]] auto PeekChar() const -> char;
 
   auto SkipWhitespace() -> void;
 };

@@ -111,7 +111,7 @@ auto Lexer::ReadNumber() -> std::string {
 }
 
 auto Lexer::ReadIdentifier() -> std::string {
-  const auto posiiton = m_position;
+  const auto position = m_position;
   auto num_chars = 0;
 
   while (utils::isAsciiLetter(m_ch)) {
@@ -119,10 +119,10 @@ auto Lexer::ReadIdentifier() -> std::string {
     num_chars++;
   }
 
-  return m_input.substr(posiiton, num_chars);
+  return m_input.substr(position, num_chars);
 }
 
-auto Lexer::PeekChar() -> char {
+auto Lexer::PeekChar() const -> char {
   if (m_read_position >= m_input.size()) {
     return '\0';
   }

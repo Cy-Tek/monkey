@@ -6,14 +6,19 @@
 
 namespace ast {
 
-class LetStatment : public Statement {
-  LetStatment() = default;
-  LetStatment(Token token, Identifier name, std::unique_ptr<Expression> value);
+class LetStatement : public Statement {
+ public:
+  LetStatement() = default;
+  LetStatement(Token token, Identifier name, std::unique_ptr<Expression> value);
 
-  LetStatment(LetStatment &&other);
-  auto operator=(LetStatment &&other) noexcept -> LetStatment &;
+  LetStatement(LetStatement &&other) noexcept;
+  auto operator=(LetStatement &&other) noexcept -> LetStatement &;
 
-  auto TokenLiteral() const -> std::string override;
+  [[nodiscard]] auto TokenLiteral() const -> std::string override;
+
+  [[nodiscard]] auto Name() const -> const Identifier &;
+  [[nodiscard]] auto Tok() const -> const Token &;
+  [[nodiscard]] auto Value() const -> const Expression &;
 
  private:
   Token m_token;

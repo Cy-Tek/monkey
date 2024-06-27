@@ -10,10 +10,13 @@ class Identifier : public Expression {
   Identifier() = default;
   Identifier(Token token, std::string value);
 
-  Identifier(Identifier &&other);
-  auto operator=(Identifier &&other) -> Identifier &;
+  Identifier(Identifier &&other) noexcept;
+  auto operator=(Identifier &&other) noexcept -> Identifier &;
 
-  auto TokenLiteral() const -> std::string override;
+  [[nodiscard]] auto TokenLiteral() const -> std::string override;
+
+  [[nodiscard]] auto Tok() const -> const Token &;
+  [[nodiscard]] auto Value() const -> const std::string &;
 
  private:
   Token m_token;

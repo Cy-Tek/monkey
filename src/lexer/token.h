@@ -54,14 +54,14 @@ class Token {
   Token();
   Token(TokenType type, std::string literal);
 
-  Token(Token &&other);
-  auto operator=(Token &&other) -> Token &;
+  Token(Token &&other) noexcept;
+  auto operator=(Token &&other) noexcept -> Token &;
 
   Token(Token const &other) = default;
   auto operator=(Token const &other) -> Token & = default;
 
-  auto Type() const -> TokenType;
-  auto Literal() const -> const std::string &;
+  [[nodiscard]] auto Type() const -> TokenType;
+  [[nodiscard]] auto Literal() const -> const std::string &;
 
  private:
   TokenType m_type;

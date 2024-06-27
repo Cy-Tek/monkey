@@ -10,4 +10,8 @@ auto Program::TokenLiteral() const -> std::string {
   return "";
 }
 
+auto Program::Statements() -> std::vector<std::unique_ptr<Statement>> & {
+  return m_statements;
+}
+
 }// namespace ast
