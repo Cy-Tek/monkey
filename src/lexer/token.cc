@@ -43,6 +43,7 @@ auto Token::operator=(Token &&other) noexcept -> Token & {
 auto Token::Type() const -> TokenType {
   return m_type;
 }
+
 auto Token::Literal() const -> const std::string & {
   return m_literal;
 }

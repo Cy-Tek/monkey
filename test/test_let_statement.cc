@@ -6,8 +6,7 @@
 
 auto testLetStatement(ast::Statement *statement, const std::string &name) -> void {
   EXPECT_NE(statement, nullptr);
-
-  EXPECT_EQ(statement->TokenLiteral(), name);
+  EXPECT_EQ(statement->TokenLiteral(), "let");
 
   auto let_statement = dynamic_cast<ast::LetStatement *>(statement);
 
@@ -24,7 +23,7 @@ TEST(LetStatement, IntAssignment) {
 
   auto parser = ast::Parser{input};
   auto program = parser.ParseProgram();
-  const auto& statements = program.Statements();
+  const auto &statements = program.Statements();
 
   EXPECT_EQ(statements.size(), 3);
 
@@ -37,4 +36,9 @@ TEST(LetStatement, IntAssignment) {
       {"y"},
       {"foobar"},
   };
+
+  for (size_t i = 0; i < tests.size(); ++i) {
+    auto statement = statements[i].get();
+    testLetStatement(statement, tests[i].expected_identifier);
+  }
 }

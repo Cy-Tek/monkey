@@ -7,24 +7,6 @@ LetStatement::LetStatement(Token token, Identifier name, std::unique_ptr<Express
       m_name{std::move(name)},
       m_value{std::move(value)} {}
 
-LetStatement::LetStatement(LetStatement &&other)  noexcept {
-  if (this != &other) {
-    m_token = std::move(other.m_token);
-    m_name = std::move(other.m_name);
-    m_value = std::move(other.m_value);
-  }
-}
-
-auto LetStatement::operator=(LetStatement &&other) noexcept -> LetStatement & {
-  if (this != &other) {
-    m_token = std::move(other.m_token);
-    m_name = std::move(other.m_name);
-    m_value = std::move(other.m_value);
-  }
-
-  return *this;
-}
-
 auto LetStatement::TokenLiteral() const -> std::string {
   return this->m_token.Literal();
 }

@@ -11,8 +11,8 @@ class LetStatement : public Statement {
   LetStatement() = default;
   LetStatement(Token token, Identifier name, std::unique_ptr<Expression> value);
 
-  LetStatement(LetStatement &&other) noexcept;
-  auto operator=(LetStatement &&other) noexcept -> LetStatement &;
+  LetStatement(LetStatement &&other) noexcept = default;
+  auto operator=(LetStatement &&other) noexcept -> LetStatement & = default;
 
   [[nodiscard]] auto TokenLiteral() const -> std::string override;
 

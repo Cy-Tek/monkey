@@ -1,5 +1,7 @@
 #pragma once
 
+#include "ast.h"
+#include "let_statement.h"
 #include "lexer.h"
 #include "program.h"
 #include "token.h"
@@ -22,6 +24,13 @@ class Parser {
 
  private:
   auto NextToken() -> void;
+
+  auto ParseStatement() -> std::unique_ptr<Statement>;
+  auto ParseLetStatement() -> std::unique_ptr<LetStatement>;
+
+  auto CurTokenIs(TokenType t_type) const -> bool;
+  auto PeekTokenIs(TokenType t_type) const -> bool;
+  auto ExpectPeek(TokenType t_type) -> bool;
 
   lexer::Lexer m_lexer;
 

@@ -10,8 +10,8 @@ class Identifier : public Expression {
   Identifier() = default;
   Identifier(Token token, std::string value);
 
-  Identifier(Identifier &&other) noexcept;
-  auto operator=(Identifier &&other) noexcept -> Identifier &;
+  Identifier(Identifier &&other) noexcept = default;
+  auto operator=(Identifier &&other) noexcept -> Identifier & = default;
 
   [[nodiscard]] auto TokenLiteral() const -> std::string override;
 
