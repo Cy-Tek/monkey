@@ -1,10 +1,8 @@
 #include "parser.h"
-#include "program.h"
-#include "token.h"
 
 namespace ast {
 
-Parser::Parser(std::string input) : m_lexer{input} {
+Parser::Parser(std::string input) : m_lexer{std::move(input)} {
   NextToken();
   NextToken();
 }
@@ -64,7 +62,7 @@ auto Parser::PeekTokenIs(TokenType t_type) const -> bool {
   return m_peek_token.Type() == t_type;
 }
 
-auto Parser::ExpectPeek(TokenType t_type) -> bool {
+auto Parser::ExpectPeek(const TokenType t_type) -> bool {
   if (PeekTokenIs(t_type)) {
     NextToken();
     return true;
@@ -75,7 +73,12 @@ auto Parser::ExpectPeek(TokenType t_type) -> bool {
 }
 
 auto Parser::PeekError(TokenType t_type) -> void {
-  auto&& msg = std::format("Expected next token to be {}, got {} instead", t_type, m_peek_token.Type());
+  auto msg = std::format(
+    "Expected next token to be {}, got {} instead",
+    tokenTypeToString(t_type),
+    tokenTypeToString(m_peek_token.Type())
+  );
+
   m_errors.push_back(std::move(msg));
 }
 

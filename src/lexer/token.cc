@@ -48,7 +48,7 @@ auto Token::Literal() const -> const std::string& {
   return m_literal;
 }
 
-auto tokenTypeToString(TokenType type) -> std::string {
+auto tokenTypeToString(TokenType type) -> std::string_view {
   switch (type) {
     case TokenType::Illegal:
       return "ILLEGAL";
@@ -105,6 +105,8 @@ auto tokenTypeToString(TokenType type) -> std::string {
     case TokenType::Return:
       return "RETURN";
   }
+
+  return "undefined";
 }
 
 auto operator<<(std::ostream& os, TokenType token_type) -> std::ostream& {

@@ -21,7 +21,7 @@ class Parser {
   auto operator=(Parser&& other) -> Parser& = delete;
 
   auto ParseProgram() -> Program;
-  auto Errors() const noexcept -> const std::vector<std::string>&;
+  [[nodiscard]] auto Errors() const noexcept -> const std::vector<std::string>&;
 
  private:
   auto NextToken() -> void;
@@ -29,8 +29,9 @@ class Parser {
   auto ParseStatement() -> std::unique_ptr<Statement>;
   auto ParseLetStatement() -> std::unique_ptr<LetStatement>;
 
-  auto CurTokenIs(TokenType t_type) const -> bool;
-  auto PeekTokenIs(TokenType t_type) const -> bool;
+  [[nodiscard]] auto CurTokenIs(TokenType t_type) const -> bool;
+  [[nodiscard]] auto PeekTokenIs(TokenType t_type) const -> bool;
+
   auto ExpectPeek(TokenType t_type) -> bool;
   auto PeekError(TokenType t_type) -> void;
 

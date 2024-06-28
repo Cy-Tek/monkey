@@ -3,15 +3,26 @@
 #include "parser.h"
 
 #include <gtest/gtest.h>
+#include <iostream>
 
-auto testLetStatement(ast::Statement* statement, const std::string &name) -> void {
+auto testLetStatement(ast::Statement* statement, const std::string& name) -> void {
   EXPECT_NE(statement, nullptr);
   EXPECT_EQ(statement->TokenLiteral(), "let");
 
-  auto let_statement = dynamic_cast<ast::LetStatement *>(statement);
+  auto let_statement = dynamic_cast<ast::LetStatement*>(statement);
 
   EXPECT_EQ(let_statement->Name().Value(), name);
   EXPECT_EQ(let_statement->Name().TokenLiteral(), name);
+}
+
+auto checkParserErrors(ast::Parser& parser) -> void {
+  const auto& errors = parser.Errors();
+
+  if (errors.empty()) return;
+
+  for (const auto& err : errors) {
+    FAIL() << "Parser error: " << err << std::endl;
+  }
 }
 
 TEST(LetStatement, IntAssignment) {
@@ -23,7 +34,10 @@ TEST(LetStatement, IntAssignment) {
 
   auto parser = ast::Parser{input};
   auto program = parser.ParseProgram();
-  const auto &statements = program.Statements();
+
+  checkParserErrors(parser);
+
+  const auto& statements = program.Statements();
 
   EXPECT_EQ(statements.size(), 3);
 

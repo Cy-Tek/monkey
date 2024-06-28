@@ -1,14 +1,12 @@
 #pragma once
 
 #include "ast.h"
-#include <vector>
 
 namespace ast {
 
 class Program : public Node {
  public:
   Program() = default;
-  ~Program() = default;
 
   Program(Program&& other) noexcept = default;
   auto operator=(Program&& other) noexcept -> Program& = default;
