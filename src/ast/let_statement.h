@@ -11,14 +11,11 @@ class LetStatement : public Statement {
   LetStatement() = default;
   LetStatement(Token token, Identifier name, std::unique_ptr<Expression> value);
 
-  LetStatement(LetStatement &&other) noexcept = default;
-  auto operator=(LetStatement &&other) noexcept -> LetStatement & = default;
-
   [[nodiscard]] auto TokenLiteral() const -> std::string override;
 
-  [[nodiscard]] auto Name() const -> const Identifier &;
-  [[nodiscard]] auto Tok() const -> const Token &;
-  [[nodiscard]] auto Value() const -> const Expression &;
+  [[nodiscard]] auto Name() const -> const Identifier&;
+  [[nodiscard]] auto Tok() const -> const Token&;
+  [[nodiscard]] auto Value() const -> const Expression&;
 
  private:
   Token m_token;

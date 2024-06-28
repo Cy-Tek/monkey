@@ -1,6 +1,6 @@
 add_executable(tests test_main.cc
         test_lexer.cc
-        test_let_statement.cc)
+        test_parser.cc)
 
 target_link_libraries(tests gtest_main lexerLib astLib)
 target_include_directories(tests PRIVATE

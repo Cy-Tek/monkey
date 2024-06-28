@@ -1,4 +1,7 @@
 #include "parser.h"
+#include "return_statement.h"
+#include "token.h"
+#include <memory>
 
 namespace ast {
 
@@ -34,6 +37,7 @@ auto Parser::NextToken() -> void {
 auto Parser::ParseStatement() -> std::unique_ptr<Statement> {
   switch (m_cur_token.Type()) {
     case TokenType::Let: return ParseLetStatement();
+    case TokenType::Return: return ParseReturnStatement();
     default: return nullptr;
   }
 }
@@ -51,7 +55,25 @@ auto Parser::ParseLetStatement() -> std::unique_ptr<LetStatement> {
     return nullptr;
   }
 
+  // TODO: We're skipping parsing expressions for now
+  while (m_cur_token.Type() != TokenType::Semicolon) {
+    NextToken();
+  }
+
   return std::make_unique<LetStatement>(token, std::move(name), nullptr);
+}
+
+auto Parser::ParseReturnStatement() -> std::unique_ptr<ReturnStatement> {
+  auto token = std::move(m_cur_token);
+
+  NextToken();
+
+  // TODO: We're skipping parsing expressions for now
+  while (m_cur_token.Type() != TokenType::Semicolon) {
+    NextToken();
+  }
+
+  return std::make_unique<ReturnStatement>(token, nullptr);
 }
 
 auto Parser::CurTokenIs(TokenType t_type) const -> bool {
@@ -74,10 +96,9 @@ auto Parser::ExpectPeek(const TokenType t_type) -> bool {
 
 auto Parser::PeekError(TokenType t_type) -> void {
   auto msg = std::format(
-    "Expected next token to be {}, got {} instead",
-    tokenTypeToString(t_type),
-    tokenTypeToString(m_peek_token.Type())
-  );
+      "Expected next token to be {}, got {} instead",
+      tokenTypeToString(t_type),
+      tokenTypeToString(m_peek_token.Type()));
 
   m_errors.push_back(std::move(msg));
 }

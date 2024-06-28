@@ -4,6 +4,7 @@
 #include "let_statement.h"
 #include "lexer.h"
 #include "program.h"
+#include "return_statement.h"
 #include "token.h"
 
 namespace ast {
@@ -28,6 +29,7 @@ class Parser {
 
   auto ParseStatement() -> std::unique_ptr<Statement>;
   auto ParseLetStatement() -> std::unique_ptr<LetStatement>;
+  auto ParseReturnStatement() -> std::unique_ptr<ReturnStatement>;
 
   [[nodiscard]] auto CurTokenIs(TokenType t_type) const -> bool;
   [[nodiscard]] auto PeekTokenIs(TokenType t_type) const -> bool;
