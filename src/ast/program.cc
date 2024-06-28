@@ -10,6 +10,12 @@ auto Program::TokenLiteral() const -> std::string {
   return "";
 }
 
+auto Program::DebugPrint(std::ostream& os) const -> void {
+  for (const auto& statement : m_statements) {
+    os << *statement.get();
+  }
+}
+
 auto Program::Statements() -> std::vector<std::unique_ptr<Statement>>& {
   return m_statements;
 }

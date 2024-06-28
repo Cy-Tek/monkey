@@ -12,6 +12,7 @@ class Program : public Node {
   auto operator=(Program&& other) noexcept -> Program& = default;
 
   [[nodiscard]] auto TokenLiteral() const -> std::string override;
+  auto DebugPrint(std::ostream&) const -> void override;
 
   auto Statements() -> std::vector<std::unique_ptr<Statement>>&;
   auto AddStatement(std::unique_ptr<Statement>&& statement) -> void;

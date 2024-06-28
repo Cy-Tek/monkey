@@ -11,6 +11,10 @@ auto Identifier::TokenLiteral() const -> std::string {
   return tok_literal;
 }
 
+auto Identifier::DebugPrint(std::ostream& os) const -> void {
+  os << m_value;
+}
+
 auto Identifier::Tok() const -> const Token& {
   return m_token;
 }

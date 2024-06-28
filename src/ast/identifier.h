@@ -14,6 +14,7 @@ class Identifier : public Expression {
   auto operator=(Identifier&& other) noexcept -> Identifier& = default;
 
   [[nodiscard]] auto TokenLiteral() const -> std::string override;
+  auto DebugPrint(std::ostream&) const -> void override;
 
   [[nodiscard]] auto Tok() const -> const Token&;
   [[nodiscard]] auto Value() const -> const std::string&;

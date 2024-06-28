@@ -2,13 +2,14 @@
 
 #include "ast.h"
 #include "token.h"
+#include <memory>
 
 namespace ast {
 
-class ReturnStatement : public Statement {
+class ExpressionStatement : public Statement {
  public:
-  ReturnStatement() = default;
-  ReturnStatement(Token token, std::unique_ptr<Expression> value);
+  ExpressionStatement() = default;
+  ExpressionStatement(Token token, std::unique_ptr<Expression> value);
 
   [[nodiscard]] auto TokenLiteral() const -> std::string override;
   auto DebugPrint(std::ostream&) const -> void override;
@@ -18,7 +19,7 @@ class ReturnStatement : public Statement {
 
  private:
   Token m_token{};
-  std::unique_ptr<Expression> m_return_value{nullptr};
+  std::unique_ptr<Expression> m_value{nullptr};
 };
 
 }// namespace ast

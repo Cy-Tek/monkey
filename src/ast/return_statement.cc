@@ -3,11 +3,22 @@
 
 namespace ast {
 
-ReturnStatement::ReturnStatement(Token token, std::unique_ptr<Expression> value) : m_token{std::move(token)},
-                                                                                   m_return_value{std::move(value)} {}
+ReturnStatement::ReturnStatement(Token token, std::unique_ptr<Expression> value)
+    : m_token{std::move(token)},
+      m_return_value{std::move(value)} {}
 
 auto ReturnStatement::TokenLiteral() const -> std::string {
   return m_token.Literal();
+}
+
+auto ReturnStatement::DebugPrint(std::ostream& os) const -> void {
+  os << TokenLiteral() << " ";
+
+  if (m_return_value) {
+    os << *m_return_value;
+  }
+
+  os << ";";
 }
 
 auto ReturnStatement::Tok() const -> const Token& {

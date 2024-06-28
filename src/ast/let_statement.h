@@ -9,13 +9,14 @@ namespace ast {
 class LetStatement : public Statement {
  public:
   LetStatement() = default;
-  LetStatement(Token token, Identifier name, std::unique_ptr<Expression> value);
+  LetStatement(Token, Identifier, std::unique_ptr<Expression>);
 
   [[nodiscard]] auto TokenLiteral() const -> std::string override;
+  auto DebugPrint(std::ostream&) const -> void override;
 
   [[nodiscard]] auto Name() const -> const Identifier&;
   [[nodiscard]] auto Tok() const -> const Token&;
-  [[nodiscard]] auto Value() const -> const Expression&;
+  [[nodiscard]] auto Value() const -> const Expression*;
 
  private:
   Token m_token;
@@ -24,3 +25,5 @@ class LetStatement : public Statement {
 };
 
 }// namespace ast
+
+auto operator<<(std::ostream&, const ast::LetStatement&) -> std::ostream&;
