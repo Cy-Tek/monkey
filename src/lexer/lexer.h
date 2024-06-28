@@ -9,10 +9,10 @@ class Lexer {
   Lexer() = delete;
   explicit Lexer(std::string input);
 
-  Lexer(const Lexer &) = delete;
-  Lexer(Lexer &&) = delete;
-  auto operator=(const Lexer &) -> Lexer & = delete;
-  auto operator=(Lexer &&) -> Lexer & = delete;
+  Lexer(const Lexer&) = delete;
+  Lexer(Lexer&&) = delete;
+  auto operator=(const Lexer&) -> Lexer& = delete;
+  auto operator=(Lexer&&) -> Lexer& = delete;
 
   auto NextToken() -> Token;
 

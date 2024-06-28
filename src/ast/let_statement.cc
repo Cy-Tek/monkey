@@ -11,15 +11,15 @@ auto LetStatement::TokenLiteral() const -> std::string {
   return this->m_token.Literal();
 }
 
-auto LetStatement::Name() const -> const Identifier & {
+auto LetStatement::Name() const -> const Identifier& {
   return m_name;
 }
 
-auto LetStatement::Tok() const -> const Token & {
+auto LetStatement::Tok() const -> const Token& {
   return m_token;
 }
 
-auto LetStatement::Value() const -> const Expression & {
+auto LetStatement::Value() const -> const Expression& {
   return *m_value;
 }
 

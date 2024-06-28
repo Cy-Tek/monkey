@@ -13,7 +13,7 @@ auto Parser::ParseProgram() -> Program {
   auto program = Program{};
 
   while (m_cur_token.Type() != TokenType::EoF) {
-    auto &&stmt = ParseStatement();
+    auto&& stmt = ParseStatement();
     if (stmt != nullptr) {
       program.AddStatement(std::move(stmt));
     }
@@ -22,6 +22,10 @@ auto Parser::ParseProgram() -> Program {
   }
 
   return program;
+}
+
+auto Parser::Errors() const noexcept -> const std::vector<std::string>& {
+  return m_errors;
 }
 
 auto Parser::NextToken() -> void {
@@ -43,7 +47,7 @@ auto Parser::ParseLetStatement() -> std::unique_ptr<LetStatement> {
     return nullptr;
   }
 
-  auto &&name = Identifier{m_cur_token, m_cur_token.Literal()};
+  auto&& name = Identifier{m_cur_token, m_cur_token.Literal()};
 
   if (!ExpectPeek(TokenType::Assign)) {
     return nullptr;
@@ -66,7 +70,13 @@ auto Parser::ExpectPeek(TokenType t_type) -> bool {
     return true;
   }
 
+  PeekError(t_type);
   return false;
+}
+
+auto Parser::PeekError(TokenType t_type) -> void {
+  auto&& msg = std::format("Expected next token to be {}, got {} instead", t_type, m_peek_token.Type());
+  m_errors.push_back(std::move(msg));
 }
 
 }// namespace ast

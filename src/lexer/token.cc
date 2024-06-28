@@ -10,7 +10,7 @@ static const std::map<std::string, TokenType> keywords = {
     {"return", TokenType::Return},
 };
 
-auto lookupIdent(const std::string &ident) -> TokenType {
+auto lookupIdent(const std::string& ident) -> TokenType {
   if (auto it = keywords.find(ident); it != keywords.end()) {
     return it->second;
   }
@@ -21,7 +21,7 @@ auto lookupIdent(const std::string &ident) -> TokenType {
 Token::Token() : m_type{TokenType::Illegal}, m_literal{"\0"} {}
 Token::Token(TokenType type, std::string literal) : m_type{type}, m_literal{std::move(literal)} {}
 
-Token::Token(Token &&other) noexcept {
+Token::Token(Token&& other) noexcept {
   if (this != &other) {
     m_type = other.m_type;
     other.m_type = TokenType::Illegal;
@@ -29,7 +29,7 @@ Token::Token(Token &&other) noexcept {
     m_literal = std::move(other.m_literal);
   }
 }
-auto Token::operator=(Token &&other) noexcept -> Token & {
+auto Token::operator=(Token&& other) noexcept -> Token& {
   if (this != &other) {
     m_type = other.m_type;
     other.m_type = TokenType::Illegal;
@@ -44,7 +44,7 @@ auto Token::Type() const -> TokenType {
   return m_type;
 }
 
-auto Token::Literal() const -> const std::string & {
+auto Token::Literal() const -> const std::string& {
   return m_literal;
 }
 
@@ -107,6 +107,6 @@ auto tokenTypeToString(TokenType type) -> std::string {
   }
 }
 
-auto operator<<(std::ostream &os, TokenType token_type) -> std::ostream & {
+auto operator<<(std::ostream& os, TokenType token_type) -> std::ostream& {
   return os << tokenTypeToString(token_type);
 }

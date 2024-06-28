@@ -11,11 +11,11 @@ auto Identifier::TokenLiteral() const -> std::string {
   return tok_literal;
 }
 
-auto Identifier::Tok() const -> const Token & {
+auto Identifier::Tok() const -> const Token& {
   return m_token;
 }
 
-auto Identifier::Value() const -> const std::string & {
+auto Identifier::Value() const -> const std::string& {
   return m_value;
 }
 

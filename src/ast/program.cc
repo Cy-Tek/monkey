@@ -10,11 +10,11 @@ auto Program::TokenLiteral() const -> std::string {
   return "";
 }
 
-auto Program::Statements() -> std::vector<std::unique_ptr<Statement>> & {
+auto Program::Statements() -> std::vector<std::unique_ptr<Statement>>& {
   return m_statements;
 }
 
-auto Program::AddStatement(std::unique_ptr<Statement> &&statement) -> void {
+auto Program::AddStatement(std::unique_ptr<Statement>&& statement) -> void {
   m_statements.push_back(std::move(statement));
 }
 

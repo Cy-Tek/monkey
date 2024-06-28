@@ -4,7 +4,7 @@
 
 #include <gtest/gtest.h>
 
-auto testLetStatement(ast::Statement *statement, const std::string &name) -> void {
+auto testLetStatement(ast::Statement* statement, const std::string &name) -> void {
   EXPECT_NE(statement, nullptr);
   EXPECT_EQ(statement->TokenLiteral(), "let");
 

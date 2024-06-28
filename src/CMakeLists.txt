@@ -10,5 +10,5 @@ add_executable(monkey main.cpp repl.cc)
 target_link_libraries(monkey PRIVATE pch)
 target_link_libraries(monkey PUBLIC lexerLib)
 target_include_directories(monkey PRIVATE
-  ${CMAKE_CURRENT_SOURCE_DIR}/lexer
-  ${CMAKE_CURRENT_SOURCE_DIR}/utils)
+        ${CMAKE_CURRENT_SOURCE_DIR}/lexer
+        ${CMAKE_CURRENT_SOURCE_DIR}/utils)

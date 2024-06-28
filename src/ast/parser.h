@@ -14,13 +14,14 @@ class Parser {
 
   explicit Parser(std::string input);
 
-  Parser(Parser &other) = delete;
-  auto operator=(Parser &other) -> Parser & = delete;
+  Parser(Parser& other) = delete;
+  auto operator=(Parser& other) -> Parser& = delete;
 
-  Parser(Parser &&other) = delete;
-  auto operator=(Parser &&other) -> Parser & = delete;
+  Parser(Parser&& other) = delete;
+  auto operator=(Parser&& other) -> Parser& = delete;
 
   auto ParseProgram() -> Program;
+  auto Errors() const noexcept -> const std::vector<std::string>&;
 
  private:
   auto NextToken() -> void;
@@ -31,11 +32,14 @@ class Parser {
   auto CurTokenIs(TokenType t_type) const -> bool;
   auto PeekTokenIs(TokenType t_type) const -> bool;
   auto ExpectPeek(TokenType t_type) -> bool;
+  auto PeekError(TokenType t_type) -> void;
 
   lexer::Lexer m_lexer;
 
   Token m_cur_token = Token{};
   Token m_peek_token = Token{};
+
+  std::vector<std::string> m_errors{};
 };
 
 }// namespace ast
