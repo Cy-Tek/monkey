@@ -13,13 +13,13 @@ class Parser {
  public:
   Parser() = delete;
 
-  explicit Parser(std::string input);
+  explicit Parser(std::string);
 
-  Parser(Parser& other) = delete;
-  auto operator=(Parser& other) -> Parser& = delete;
+  Parser(Parser&) = delete;
+  auto operator=(Parser) -> Parser& = delete;
 
-  Parser(Parser&& other) = delete;
-  auto operator=(Parser&& other) -> Parser& = delete;
+  Parser(Parser&&) = delete;
+  auto operator=(Parser&&) -> Parser& = delete;
 
   auto parse_program() -> Program;
   [[nodiscard]] auto errors() const noexcept -> const std::vector<std::string>&;
@@ -31,11 +31,11 @@ class Parser {
   auto parse_let_statement() -> std::unique_ptr<LetStatement>;
   auto parse_return_statement() -> std::unique_ptr<ReturnStatement>;
 
-  [[nodiscard]] auto cur_token_is(TokenType t_type) const -> bool;
-  [[nodiscard]] auto peek_token_is(TokenType t_type) const -> bool;
+  [[nodiscard]] auto cur_token_is(TokenType) const -> bool;
+  [[nodiscard]] auto peek_token_is(TokenType) const -> bool;
 
-  auto expect_peek(TokenType t_type) -> bool;
-  auto peek_error(TokenType t_type) -> void;
+  auto expect_peek(TokenType) -> bool;
+  auto peek_error(TokenType) -> void;
 
   lexer::Lexer m_lexer;
 

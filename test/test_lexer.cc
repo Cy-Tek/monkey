@@ -127,10 +127,10 @@ TEST(Lexer, NextToken) {
 
   auto lexer = Lexer{input};
 
-  for (const auto test : tests) {
+  for (const auto& [expected_type, expected_literal] : tests) {
     const auto token = lexer.next_token();
 
-    EXPECT_EQ(token.type(), test.expected_type);
-    EXPECT_EQ(token.literal(), test.expected_literal);
+    EXPECT_EQ(token.type(), expected_type);
+    EXPECT_EQ(token.literal(), expected_literal);
   }
 }
