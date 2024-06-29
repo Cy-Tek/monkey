@@ -128,9 +128,9 @@ TEST(Lexer, NextToken) {
   auto lexer = Lexer{input};
 
   for (const auto test : tests) {
-    const auto token = lexer.NextToken();
+    const auto token = lexer.next_token();
 
-    EXPECT_EQ(token.Type(), test.expected_type);
-    EXPECT_EQ(token.Literal(), test.expected_literal);
+    EXPECT_EQ(token.type(), test.expected_type);
+    EXPECT_EQ(token.literal(), test.expected_literal);
   }
 }

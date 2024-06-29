@@ -13,11 +13,11 @@ class Identifier : public Expression {
   Identifier(Identifier&& other) noexcept = default;
   auto operator=(Identifier&& other) noexcept -> Identifier& = default;
 
-  [[nodiscard]] auto TokenLiteral() const -> std::string override;
-  auto DebugPrint(std::ostream&) const -> void override;
+  [[nodiscard]] auto token_literal() const -> std::string override;
+  auto debug_print(std::ostream&) const -> void override;
 
-  [[nodiscard]] auto Tok() const -> const Token&;
-  [[nodiscard]] auto Value() const -> const std::string&;
+  [[nodiscard]] auto token() const -> const Token&;
+  [[nodiscard]] auto value() const -> const std::string&;
 
  private:
   Token m_token;

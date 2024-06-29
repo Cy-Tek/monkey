@@ -3,12 +3,12 @@
 class Debug {
  public:
   virtual ~Debug() = default;
-  virtual auto DebugPrint(std::ostream&) const -> void = 0;
+  virtual auto debug_print(std::ostream&) const -> void = 0;
 };
 
 template<typename T>
   requires std::is_base_of_v<Debug, T>
 std::ostream& operator<<(std::ostream& os, const T& obj) {
-  obj.DebugPrint(os);
+  obj.debug_print(os);
   return os;
 }

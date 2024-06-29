@@ -7,21 +7,21 @@ ExpressionStatement::ExpressionStatement(Token token, std::unique_ptr<Expression
     : m_token{std::move(token)},
       m_value(std::move(value)) {}
 
-auto ExpressionStatement::TokenLiteral() const -> std::string {
-  return m_token.Literal();
+auto ExpressionStatement::token_literal() const -> std::string {
+  return m_token.literal();
 }
 
-auto ExpressionStatement::DebugPrint(std::ostream& os) const -> void {
+auto ExpressionStatement::debug_print(std::ostream& os) const -> void {
   if (m_value) {
     os << *m_value;
   }
 }
 
-auto ExpressionStatement::Tok() const -> const Token& {
+auto ExpressionStatement::token() const -> const Token& {
   return m_token;
 }
 
-auto ExpressionStatement::Value() const -> const Expression& {
+auto ExpressionStatement::value() const -> const Expression& {
   return *m_value.get();
 }
 

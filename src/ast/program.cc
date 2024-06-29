@@ -2,25 +2,25 @@
 
 namespace ast {
 
-auto Program::TokenLiteral() const -> std::string {
+auto Program::token_literal() const -> std::string {
   if (!m_statements.empty()) {
-    return m_statements[0]->TokenLiteral();
+    return m_statements[0]->token_literal();
   }
 
   return "";
 }
 
-auto Program::DebugPrint(std::ostream& os) const -> void {
+auto Program::debug_print(std::ostream& os) const -> void {
   for (const auto& statement : m_statements) {
-    os << *statement.get();
+    os << *statement;
   }
 }
 
-auto Program::Statements() -> std::vector<std::unique_ptr<Statement>>& {
+auto Program::statements() -> std::vector<std::unique_ptr<Statement>>& {
   return m_statements;
 }
 
-auto Program::AddStatement(std::unique_ptr<Statement>&& statement) -> void {
+auto Program::add_statement(std::unique_ptr<Statement> statement) -> void {
   m_statements.push_back(std::move(statement));
 }
 

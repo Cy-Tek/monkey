@@ -21,13 +21,10 @@ auto lookupIdent(const std::string& ident) -> TokenType {
 Token::Token() : m_type{TokenType::Illegal}, m_literal{"\0"} {}
 Token::Token(TokenType type, std::string literal) : m_type{type}, m_literal{std::move(literal)} {}
 
-Token::Token(Token&& other) noexcept {
-  if (this != &other) {
-    m_type = other.m_type;
-    other.m_type = TokenType::Illegal;
-
-    m_literal = std::move(other.m_literal);
-  }
+Token::Token(Token&& other) noexcept
+    : m_type{other.m_type},
+      m_literal{std::move(other.m_literal)} {
+  other.m_type = TokenType::Illegal;
 }
 auto Token::operator=(Token&& other) noexcept -> Token& {
   if (this != &other) {
@@ -40,11 +37,11 @@ auto Token::operator=(Token&& other) noexcept -> Token& {
   return *this;
 }
 
-auto Token::Type() const -> TokenType {
+auto Token::type() const -> TokenType {
   return m_type;
 }
 
-auto Token::Literal() const -> const std::string& {
+auto Token::literal() const -> const std::string& {
   return m_literal;
 }
 

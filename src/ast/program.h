@@ -11,11 +11,11 @@ class Program : public Node {
   Program(Program&& other) noexcept = default;
   auto operator=(Program&& other) noexcept -> Program& = default;
 
-  [[nodiscard]] auto TokenLiteral() const -> std::string override;
-  auto DebugPrint(std::ostream&) const -> void override;
+  [[nodiscard]] auto token_literal() const -> std::string override;
+  auto debug_print(std::ostream&) const -> void override;
 
-  auto Statements() -> std::vector<std::unique_ptr<Statement>>&;
-  auto AddStatement(std::unique_ptr<Statement>&& statement) -> void;
+  auto statements() -> std::vector<std::unique_ptr<Statement>>&;
+  auto add_statement(std::unique_ptr<Statement> statement) -> void;
 
  private:
   std::vector<std::unique_ptr<Statement>> m_statements{};

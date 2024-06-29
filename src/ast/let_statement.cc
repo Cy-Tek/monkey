@@ -7,12 +7,12 @@ LetStatement::LetStatement(Token token, Identifier name, std::unique_ptr<Express
       m_name{std::move(name)},
       m_value{std::move(value)} {}
 
-auto LetStatement::TokenLiteral() const -> std::string {
-  return this->m_token.Literal();
+auto LetStatement::token_literal() const -> std::string {
+  return this->m_token.literal();
 }
 
-auto LetStatement::DebugPrint(std::ostream& os) const -> void {
-  os << TokenLiteral() << " " << Name() << " = ";
+auto LetStatement::debug_print(std::ostream& os) const -> void {
+  os << token_literal() << " " << name() << " = ";
 
   if (m_value) {
     os << *m_value;
@@ -21,15 +21,15 @@ auto LetStatement::DebugPrint(std::ostream& os) const -> void {
   os << ";";
 }
 
-auto LetStatement::Name() const -> const Identifier& {
+auto LetStatement::name() const -> const Identifier& {
   return m_name;
 }
 
-auto LetStatement::Tok() const -> const Token& {
+auto LetStatement::token() const -> const Token& {
   return m_token;
 }
 
-auto LetStatement::Value() const -> const Expression* {
+auto LetStatement::value() const -> const Expression* {
   return m_value.get();
 }
 

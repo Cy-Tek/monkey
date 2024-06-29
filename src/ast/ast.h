@@ -13,7 +13,7 @@ class Node : public Debug {
   Node(const Node&) = delete;
   auto operator=(const Node&) -> Node& = delete;
 
-  [[nodiscard]] virtual auto TokenLiteral() const -> std::string = 0;
+  [[nodiscard]] virtual auto token_literal() const -> std::string = 0;
 };
 
 class Statement : public Node {

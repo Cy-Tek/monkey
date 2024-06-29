@@ -5,17 +5,17 @@
 
 namespace lexer {
 
-Lexer::Lexer(std::string input) : m_input{std::move(input)} { ReadChar(); }
+Lexer::Lexer(std::string input) : m_input{std::move(input)} { read_char(); }
 
-auto Lexer::NextToken() -> Token {
+auto Lexer::next_token() -> Token {
   std::optional<Token> token{};
 
-  SkipWhitespace();
+  skip_whitespace();
 
   switch (m_ch) {
     case '=':
-      if (PeekChar() == '=') {
-        ReadChar();
+      if (peek_char() == '=') {
+        read_char();
         token = Token{TokenType::EQ, "=="};
       } else {
         token = Token{TokenType::Assign, std::string{m_ch}};
@@ -47,8 +47,8 @@ auto Lexer::NextToken() -> Token {
       token = Token{TokenType::Minus, std::string{m_ch}};
       break;
     case '!':
-      if (PeekChar() == '=') {
-        ReadChar();
+      if (peek_char() == '=') {
+        read_char();
         token = Token{TokenType::NotEq, "!="};
       } else {
         token = Token{TokenType::Bang, std::string{m_ch}};
@@ -71,25 +71,25 @@ auto Lexer::NextToken() -> Token {
       token = Token{TokenType::EoF, {}};
       break;
     default:
-      if (utils::isAsciiLetter(m_ch)) {
-        const auto literal = ReadIdentifier();
+      if (utils::is_ascii_letter(m_ch)) {
+        const auto literal = read_identifier();
         const auto type = lookupIdent(literal);
 
         return Token{type, literal};
       }
 
-      if (utils::isAsciiDigit(m_ch)) {
-        return Token{TokenType::Int, ReadNumber()};
+      if (utils::is_ascii_digit(m_ch)) {
+        return Token{TokenType::Int, read_number()};
       }
 
       token = Token{TokenType::Illegal, {}};
   };
 
-  ReadChar();
+  read_char();
   return *token;
 }
 
-auto Lexer::ReadChar() -> void {
+auto Lexer::read_char() -> void {
   if (m_read_position >= m_input.size()) {
     m_ch = 0;
   } else {
@@ -100,29 +100,29 @@ auto Lexer::ReadChar() -> void {
   m_read_position++;
 }
 
-auto Lexer::ReadNumber() -> std::string {
+auto Lexer::read_number() -> std::string {
   auto position = m_position;
 
-  while (utils::isAsciiDigit(m_ch)) {
-    ReadChar();
+  while (utils::is_ascii_digit(m_ch)) {
+    read_char();
   }
 
   return m_input.substr(position, m_position - position);
 }
 
-auto Lexer::ReadIdentifier() -> std::string {
+auto Lexer::read_identifier() -> std::string {
   const auto position = m_position;
   auto num_chars = 0;
 
-  while (utils::isAsciiLetter(m_ch)) {
-    ReadChar();
+  while (utils::is_ascii_letter(m_ch)) {
+    read_char();
     num_chars++;
   }
 
   return m_input.substr(position, num_chars);
 }
 
-auto Lexer::PeekChar() const -> char {
+auto Lexer::peek_char() const -> char {
   if (m_read_position >= m_input.size()) {
     return '\0';
   }
@@ -130,9 +130,9 @@ auto Lexer::PeekChar() const -> char {
   return m_input[m_read_position];
 }
 
-auto Lexer::SkipWhitespace() -> void {
-  while (utils::isAsciiWhitespace(m_ch)) {
-    ReadChar();
+auto Lexer::skip_whitespace() -> void {
+  while (utils::is_ascii_whitespace(m_ch)) {
+    read_char();
   }
 }
 

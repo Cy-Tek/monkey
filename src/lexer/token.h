@@ -60,8 +60,8 @@ class Token {
   Token(Token const& other) = default;
   auto operator=(Token const& other) -> Token& = default;
 
-  [[nodiscard]] auto Type() const -> TokenType;
-  [[nodiscard]] auto Literal() const -> const std::string&;
+  [[nodiscard]] auto type() const -> TokenType;
+  [[nodiscard]] auto literal() const -> const std::string&;
 
  private:
   TokenType m_type;

@@ -7,12 +7,12 @@ ReturnStatement::ReturnStatement(Token token, std::unique_ptr<Expression> value)
     : m_token{std::move(token)},
       m_return_value{std::move(value)} {}
 
-auto ReturnStatement::TokenLiteral() const -> std::string {
-  return m_token.Literal();
+auto ReturnStatement::token_literal() const -> std::string {
+  return m_token.literal();
 }
 
-auto ReturnStatement::DebugPrint(std::ostream& os) const -> void {
-  os << TokenLiteral() << " ";
+auto ReturnStatement::debug_print(std::ostream& os) const -> void {
+  os << token_literal() << " ";
 
   if (m_return_value) {
     os << *m_return_value;

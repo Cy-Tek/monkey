@@ -10,11 +10,11 @@ class ReturnStatement : public Statement {
   ReturnStatement() = default;
   ReturnStatement(Token token, std::unique_ptr<Expression> value);
 
-  [[nodiscard]] auto TokenLiteral() const -> std::string override;
-  auto DebugPrint(std::ostream&) const -> void override;
+  [[nodiscard]] auto token_literal() const -> std::string override;
+  auto debug_print(std::ostream&) const -> void override;
 
-  auto Tok() const -> const Token&;
-  auto Value() const -> const Expression&;
+  [[nodiscard]] auto Tok() const -> const Token&;
+  [[nodiscard]] auto Value() const -> const Expression&;
 
  private:
   Token m_token{};

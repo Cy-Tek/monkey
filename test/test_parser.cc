@@ -9,7 +9,7 @@
 // ── Utility function ────────────────────────────────────────────────
 
 auto checkParserErrors(ast::Parser& parser) -> void {
-  const auto& errors = parser.Errors();
+  const auto& errors = parser.errors();
 
   if (errors.empty()) return;
 
@@ -22,12 +22,12 @@ auto checkParserErrors(ast::Parser& parser) -> void {
 
 auto testLetStatement(ast::Statement* statement, const std::string& name) -> void {
   EXPECT_NE(statement, nullptr);
-  EXPECT_EQ(statement->TokenLiteral(), "let");
+  EXPECT_EQ(statement->token_literal(), "let");
 
   auto let_statement = dynamic_cast<ast::LetStatement*>(statement);
 
-  EXPECT_EQ(let_statement->Name().Value(), name);
-  EXPECT_EQ(let_statement->Name().TokenLiteral(), name);
+  EXPECT_EQ(let_statement->name().value(), name);
+  EXPECT_EQ(let_statement->name().token_literal(), name);
 }
 
 TEST(Parser, LetStatement) {
@@ -38,11 +38,11 @@ TEST(Parser, LetStatement) {
   )";
 
   auto parser = ast::Parser{input};
-  auto program = parser.ParseProgram();
+  auto program = parser.parse_program();
 
   checkParserErrors(parser);
 
-  const auto& statements = program.Statements();
+  const auto& statements = program.statements();
 
   EXPECT_EQ(statements.size(), 3);
 
@@ -72,8 +72,8 @@ TEST(Parser, ReturnStatement) {
   )";
 
   auto parser = ast::Parser{input};
-  auto program = parser.ParseProgram();
-  const auto& statements = program.Statements();
+  auto program = parser.parse_program();
+  const auto& statements = program.statements();
 
   checkParserErrors(parser);
 
@@ -83,6 +83,6 @@ TEST(Parser, ReturnStatement) {
     auto return_stmt = dynamic_cast<ast::ReturnStatement*>(stmt.get());
 
     EXPECT_NE(return_stmt, nullptr);
-    EXPECT_EQ(return_stmt->TokenLiteral(), "return");
+    EXPECT_EQ(return_stmt->token_literal(), "return");
   }
 }
