@@ -1,13 +1,21 @@
 #pragma once
 
 #include "ast.h"
-#include "let_statement.h"
 #include "lexer.h"
 #include "program.h"
-#include "return_statement.h"
 #include "token.h"
 
 namespace ast {
+
+class Statement;
+class LetStatement;
+class ReturnStatement;
+class ExpressionStatement;
+
+enum class Precedence;
+
+using InfixParseFn = std::function<std::unique_ptr<Expression>(Expression&&)>;
+using PrefixParseFn = std::function<std::unique_ptr<Expression>()>;
 
 class Parser {
  public:
@@ -25,11 +33,15 @@ class Parser {
   [[nodiscard]] auto errors() const noexcept -> const std::vector<std::string>&;
 
  private:
-  auto NextToken() -> void;
+  auto next_token() -> void;
 
   auto parse_statement() -> std::unique_ptr<Statement>;
   auto parse_let_statement() -> std::unique_ptr<LetStatement>;
   auto parse_return_statement() -> std::unique_ptr<ReturnStatement>;
+  auto parse_expression_statement() -> std::unique_ptr<ExpressionStatement>;
+
+  auto parse_expression(Precedence) -> std::unique_ptr<Expression>;
+  auto parse_identifier() -> std::unique_ptr<Expression>;
 
   [[nodiscard]] auto cur_token_is(TokenType) const -> bool;
   [[nodiscard]] auto peek_token_is(TokenType) const -> bool;
@@ -37,10 +49,16 @@ class Parser {
   auto expect_peek(TokenType) -> bool;
   auto peek_error(TokenType) -> void;
 
+  auto register_prefix(TokenType, const PrefixParseFn&) -> void;
+  auto register_infix(TokenType, const InfixParseFn&) -> void;
+
   lexer::Lexer m_lexer;
 
   Token m_cur_token = Token{};
   Token m_peek_token = Token{};
+
+  std::map<TokenType, PrefixParseFn> m_prefix_parse_fns{};
+  std::map<TokenType, InfixParseFn> m_infix_parse_fns{};
 
   std::vector<std::string> m_errors{};
 };

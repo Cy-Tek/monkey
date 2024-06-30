@@ -1,4 +1,6 @@
 #include "expression_statement.h"
+
+#include "identifier.h"
 #include "token.h"
 
 namespace ast {
@@ -21,8 +23,8 @@ auto ExpressionStatement::token() const -> const Token& {
   return m_token;
 }
 
-auto ExpressionStatement::value() const -> const Expression& {
-  return *m_value.get();
+auto ExpressionStatement::value() const -> Expression& {
+  return *m_value;
 }
 
 }// namespace ast

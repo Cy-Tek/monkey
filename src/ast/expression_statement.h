@@ -2,7 +2,6 @@
 
 #include "ast.h"
 #include "token.h"
-#include <memory>
 
 namespace ast {
 
@@ -15,7 +14,7 @@ class ExpressionStatement : public Statement {
   auto debug_print(std::ostream&) const -> void override;
 
   [[nodiscard]] auto token() const -> const Token&;
-  [[nodiscard]] auto value() const -> const Expression&;
+  [[nodiscard]] auto value() const -> Expression&;
 
  private:
   Token m_token{};

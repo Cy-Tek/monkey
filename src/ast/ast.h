@@ -5,7 +5,7 @@ namespace ast {
 class Node : public Debug {
  public:
   Node() = default;
-  virtual ~Node() = default;
+  ~Node() override = default;
 
   Node(Node&&) noexcept = default;
   Node& operator=(Node&&) noexcept = default;

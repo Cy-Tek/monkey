@@ -3,12 +3,13 @@
 #include "parser.h"
 #include "return_statement.h"
 
+#include <expression_statement.h>
 #include <gtest/gtest.h>
 #include <iostream>
 
 // ── Utility function ────────────────────────────────────────────────
 
-auto checkParserErrors(ast::Parser& parser) -> void {
+auto check_parser_errors(const ast::Parser& parser) -> void {
   const auto& errors = parser.errors();
 
   if (errors.empty()) return;
@@ -20,7 +21,7 @@ auto checkParserErrors(ast::Parser& parser) -> void {
 
 // ── Let statements ──────────────────────────────────────────────────
 
-auto testLetStatement(ast::Statement* statement, const std::string& name) -> void {
+auto test_let_statement(ast::Statement* statement, const std::string& name) -> void {
   EXPECT_NE(statement, nullptr);
   EXPECT_EQ(statement->token_literal(), "let");
 
@@ -40,7 +41,7 @@ TEST(Parser, LetStatement) {
   auto parser = ast::Parser{input};
   auto program = parser.parse_program();
 
-  checkParserErrors(parser);
+  check_parser_errors(parser);
 
   const auto& statements = program.statements();
 
@@ -58,7 +59,7 @@ TEST(Parser, LetStatement) {
 
   for (size_t i = 0; i < tests.size(); ++i) {
     auto statement = statements[i].get();
-    testLetStatement(statement, tests[i].expected_identifier);
+    test_let_statement(statement, tests[i].expected_identifier);
   }
 }
 
@@ -75,7 +76,7 @@ TEST(Parser, ReturnStatement) {
   auto program = parser.parse_program();
   const auto& statements = program.statements();
 
-  checkParserErrors(parser);
+  check_parser_errors(parser);
 
   EXPECT_EQ(statements.size(), 3);
 
@@ -85,4 +86,28 @@ TEST(Parser, ReturnStatement) {
     EXPECT_NE(return_stmt, nullptr);
     EXPECT_EQ(return_stmt->token_literal(), "return");
   }
+}
+
+TEST(Parser, ToDebugString) {
+  auto ident = ast::Identifier{Token{TokenType::Ident, "anotherVal"}, "anotherVar"};
+}
+
+//  ── Identifier expression ───────────────────────────────────────────
+
+TEST(Parser, IdentifierExpression) {
+  const auto input = "foobar;";
+
+  auto parser = ast::Parser{input};
+  auto program = parser.parse_program();
+  check_parser_errors(parser);
+
+  const auto& statements = program.statements();
+  EXPECT_EQ(statements.size(), 1);
+
+  const auto expr = dynamic_cast<ast::ExpressionStatement*>(statements[0].get());
+  EXPECT_NE(expr, nullptr);
+
+  const auto& ident = dynamic_cast<ast::Identifier&>(expr->value());
+  EXPECT_EQ(ident.value(), "foobar");
+  EXPECT_EQ(ident.token_literal(), "foobar");
 }
