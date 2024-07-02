@@ -4,6 +4,7 @@
 #include "identifier.h"
 #include "integer_literal.h"
 #include "let_statement.h"
+#include "prefix_expression.h"
 #include "return_statement.h"
 #include "token.h"
 
@@ -25,6 +26,8 @@ Parser::Parser(std::string input) : m_lexer{std::move(input)} {
 
   register_prefix(TokenType::Ident, [this] { return this->parse_identifier(); });
   register_prefix(TokenType::Int, [this] { return this->parse_integer_literal(); });
+  register_prefix(TokenType::Bang, [this] { return this->parse_prefix_expression(); });
+  register_prefix(TokenType::Minus, [this] { return this->parse_prefix_expression(); });
 }
 
 auto Parser::parse_program() -> Program {
@@ -105,10 +108,24 @@ auto Parser::parse_expression_statement() -> std::unique_ptr<ExpressionStatement
 
 auto Parser::parse_expression(Precedence precedence) -> std::unique_ptr<Expression> {
   const auto prefix = m_prefix_parse_fns.find(m_cur_token.type());
-  if (prefix == m_prefix_parse_fns.end()) return nullptr;
+  if (prefix == m_prefix_parse_fns.end()) {
+    no_prefix_parse_fn_error(m_cur_token.type());
+    return nullptr;
+  }
 
   auto left_expr = prefix->second();
   return left_expr;
+}
+
+auto Parser::parse_prefix_expression() -> std::unique_ptr<Expression> {
+  auto token = m_cur_token;
+  auto literal = token.literal();
+
+  next_token();
+
+  auto right = parse_expression(Precedence::Prefix);
+
+  return std::make_unique<PrefixExpression>(token, std::move(literal), std::move(right));
 }
 
 auto Parser::parse_identifier() -> std::unique_ptr<Expression> {
@@ -126,11 +143,11 @@ auto Parser::parse_integer_literal() const -> std::unique_ptr<Expression> {
   }
 }
 
-auto Parser::cur_token_is(TokenType t_type) const -> bool {
+auto Parser::cur_token_is(const TokenType t_type) const -> bool {
   return m_cur_token.type() == t_type;
 }
 
-auto Parser::peek_token_is(TokenType t_type) const -> bool {
+auto Parser::peek_token_is(const TokenType t_type) const -> bool {
   return m_peek_token.type() == t_type;
 }
 
@@ -150,6 +167,11 @@ auto Parser::peek_error(const TokenType t_type) -> void {
       tokenTypeToString(t_type),
       tokenTypeToString(m_peek_token.type()));
 
+  m_errors.push_back(std::move(msg));
+}
+
+auto Parser::no_prefix_parse_fn_error(const TokenType t_type) -> void {
+  auto msg = std::format("No prefix parse function for {} found", tokenTypeToString(t_type));
   m_errors.push_back(std::move(msg));
 }
 

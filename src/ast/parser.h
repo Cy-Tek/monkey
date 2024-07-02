@@ -41,6 +41,7 @@ class Parser {
   auto parse_expression_statement() -> std::unique_ptr<ExpressionStatement>;
 
   [[nodiscard]] auto parse_expression(Precedence) -> std::unique_ptr<Expression>;
+  [[nodiscard]] auto parse_prefix_expression() -> std::unique_ptr<Expression>;
   [[nodiscard]] auto parse_identifier() -> std::unique_ptr<Expression>;
   [[nodiscard]] auto parse_integer_literal() const -> std::unique_ptr<Expression>;
 
@@ -49,6 +50,7 @@ class Parser {
 
   auto expect_peek(TokenType) -> bool;
   auto peek_error(TokenType) -> void;
+  auto no_prefix_parse_fn_error(TokenType) -> void;
 
   auto register_prefix(TokenType, const PrefixParseFn&) -> void;
   auto register_infix(TokenType, const InfixParseFn&) -> void;

@@ -1,7 +1,5 @@
 #include "integer_literal.h"
 
-#include <utility>
-
 namespace ast {
 
 IntegerLiteral::IntegerLiteral(Token token, const int64_t value)

@@ -21,7 +21,7 @@ auto startRepl(std::istream &is, std::ostream &os) -> void {
     auto lexer = lexer::Lexer(line);
     auto tok = lexer.next_token();
 
-    for (; tok.type() != peek_token_is::EoF; tok = lexer.next_token()) {
+    for (; tok.type() != TokenType::EoF; tok = lexer.next_token()) {
       os << "{ " << tok.type() << ": " << tok.literal() << " }" << std::endl;
     }
 

@@ -93,7 +93,7 @@ TEST(Parser, ToDebugString) {
   auto ident = ast::Identifier{Token{TokenType::Ident, "anotherVal"}, "anotherVar"};
 }
 
-//  ── Identifier expression ───────────────────────────────────────────
+//  ── Expressions tests ───────────────────────────────────────────────
 
 TEST(Parser, IdentifierExpression) {
   const auto input = "foobar;";
@@ -129,4 +129,26 @@ TEST(Parser, IntegerExpression) {
   const auto& int_literal = dynamic_cast<ast::IntegerLiteral&>(expr->value());
   EXPECT_EQ(int_literal.value(), 5);
   EXPECT_EQ(int_literal.token_literal(), "5");
+}
+
+TEST(Parser, PrefixExpressions) {
+  struct Test {
+    std::string input;
+    std::string prefix_operator;
+    int64_t integer_value;
+  };
+
+  const auto tests = std::vector<Test>{
+      {"!5;", "!", 5},
+      {"-15;", "-", 15},
+  };
+
+  for (const auto& test : tests) {
+    auto parser = ast::Parser{test.input};
+    auto program = parser.parse_program();
+    check_parser_errors(parser);
+
+    const auto& statements = program.statements();
+    EXPECT_EQ(statements.size(), 1);
+  }
 }
