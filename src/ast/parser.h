@@ -40,9 +40,9 @@ class Parser {
   auto parse_return_statement() -> std::unique_ptr<ReturnStatement>;
   auto parse_expression_statement() -> std::unique_ptr<ExpressionStatement>;
 
-  auto parse_expression(Precedence) -> std::unique_ptr<Expression>;
-  auto parse_identifier() -> std::unique_ptr<Expression>;
-  auto parse_integer_literal() -> std::unique_ptr<Expression>;
+  [[nodiscard]] auto parse_expression(Precedence) -> std::unique_ptr<Expression>;
+  [[nodiscard]] auto parse_identifier() -> std::unique_ptr<Expression>;
+  [[nodiscard]] auto parse_integer_literal() const -> std::unique_ptr<Expression>;
 
   [[nodiscard]] auto cur_token_is(TokenType) const -> bool;
   [[nodiscard]] auto peek_token_is(TokenType) const -> bool;

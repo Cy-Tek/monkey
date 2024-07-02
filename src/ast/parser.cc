@@ -104,7 +104,7 @@ auto Parser::parse_expression_statement() -> std::unique_ptr<ExpressionStatement
 }
 
 auto Parser::parse_expression(Precedence precedence) -> std::unique_ptr<Expression> {
-  auto prefix = m_prefix_parse_fns.find(m_cur_token.type());
+  const auto prefix = m_prefix_parse_fns.find(m_cur_token.type());
   if (prefix == m_prefix_parse_fns.end()) return nullptr;
 
   auto left_expr = prefix->second();
@@ -115,13 +115,13 @@ auto Parser::parse_identifier() -> std::unique_ptr<Expression> {
   return std::make_unique<Identifier>(m_cur_token, m_cur_token.literal());
 }
 
-auto Parser::parse_integer_literal() -> std::unique_ptr<Expression> {
+auto Parser::parse_integer_literal() const -> std::unique_ptr<Expression> {
   const auto token = m_cur_token;
 
   try {
     const auto value = std::stoi(token.literal());
     return std::make_unique<IntegerLiteral>(token, value);
-  } catch (std::invalid_argument) {
+  } catch (std::invalid_argument&) {
     return nullptr;
   }
 }
