@@ -5,7 +5,7 @@
 
 namespace ast {
 
-ExpressionStatement::ExpressionStatement(Token token, std::unique_ptr<Expression> value)
+ExpressionStatement::ExpressionStatement(Token token, std::unique_ptr<Expression>&& value)
     : m_token{std::move(token)},
       m_value(std::move(value)) {}
 

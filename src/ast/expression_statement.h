@@ -8,7 +8,7 @@ namespace ast {
 class ExpressionStatement : public Statement {
  public:
   ExpressionStatement() = default;
-  ExpressionStatement(Token token, std::unique_ptr<Expression> value);
+  ExpressionStatement(Token token, std::unique_ptr<Expression>&& value);
 
   [[nodiscard]] auto token_literal() const -> std::string override;
   auto debug_print(std::ostream&) const -> void override;
