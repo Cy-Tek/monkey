@@ -1,4 +1,5 @@
 #include "ast.h"
+#include "integer_literal.h"
 #include "let_statement.h"
 #include "parser.h"
 #include "return_statement.h"
@@ -110,4 +111,22 @@ TEST(Parser, IdentifierExpression) {
   const auto& ident = dynamic_cast<ast::Identifier&>(expr->value());
   EXPECT_EQ(ident.value(), "foobar");
   EXPECT_EQ(ident.token_literal(), "foobar");
+}
+
+TEST(Parser, IntegerExpression) {
+  const auto input = "5;";
+
+  auto parser = ast::Parser{input};
+  auto program = parser.parse_program();
+  check_parser_errors(parser);
+
+  const auto& statements = program.statements();
+  EXPECT_EQ(statements.size(), 1);
+
+  const auto expr = dynamic_cast<ast::ExpressionStatement*>(statements[0].get());
+  EXPECT_NE(expr, nullptr);
+
+  const auto& int_literal = dynamic_cast<ast::IntegerLiteral&>(expr->value());
+  EXPECT_EQ(int_literal.value(), 5);
+  EXPECT_EQ(int_literal.token_literal(), "5");
 }

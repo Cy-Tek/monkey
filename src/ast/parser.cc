@@ -2,8 +2,13 @@
 
 #include "expression_statement.h"
 #include "identifier.h"
+#include "integer_literal.h"
 #include "let_statement.h"
 #include "return_statement.h"
+#include "token.h"
+#include <memory>
+#include <stdexcept>
+#include <string>
 
 namespace ast {
 
@@ -22,6 +27,7 @@ Parser::Parser(std::string input) : m_lexer{std::move(input)} {
   next_token();
 
   register_prefix(TokenType::Ident, [this] { return this->parse_identifier(); });
+  register_prefix(TokenType::Int, [this] { return this->parse_integer_literal(); });
 }
 
 auto Parser::parse_program() -> Program {
@@ -110,6 +116,17 @@ auto Parser::parse_expression(Precedence precedence) -> std::unique_ptr<Expressi
 
 auto Parser::parse_identifier() -> std::unique_ptr<Expression> {
   return std::make_unique<Identifier>(m_cur_token, m_cur_token.literal());
+}
+
+auto Parser::parse_integer_literal() -> std::unique_ptr<Expression> {
+  const auto token = m_cur_token;
+
+  try {
+    const auto value = std::stoi(token.literal());
+    return std::make_unique<IntegerLiteral>(token, value);
+  } catch (std::invalid_argument) {
+    return nullptr;
+  }
 }
 
 auto Parser::cur_token_is(TokenType t_type) const -> bool {
