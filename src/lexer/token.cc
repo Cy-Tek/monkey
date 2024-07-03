@@ -11,7 +11,7 @@ static const std::map<std::string, TokenType> keywords = {
 };
 
 auto lookupIdent(const std::string& ident) -> TokenType {
-  if (auto it = keywords.find(ident); it != keywords.end()) {
+  if (const auto it = keywords.find(ident); it != keywords.end()) {
     return it->second;
   }
 
@@ -19,13 +19,14 @@ auto lookupIdent(const std::string& ident) -> TokenType {
 }
 
 Token::Token() : m_type{TokenType::Illegal}, m_literal{"\0"} {}
-Token::Token(TokenType type, std::string literal) : m_type{type}, m_literal{std::move(literal)} {}
+Token::Token(const TokenType type, std::string literal) : m_type{type}, m_literal{std::move(literal)} {}
 
 Token::Token(Token&& other) noexcept
     : m_type{other.m_type},
       m_literal{std::move(other.m_literal)} {
   other.m_type = TokenType::Illegal;
 }
+
 auto Token::operator=(Token&& other) noexcept -> Token& {
   if (this != &other) {
     m_type = other.m_type;
