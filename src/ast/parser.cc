@@ -2,6 +2,7 @@
 
 #include "expression_statement.h"
 #include "identifier.h"
+#include "infix_expression.h"
 #include "integer_literal.h"
 #include "let_statement.h"
 #include "prefix_expression.h"
@@ -20,6 +21,17 @@ enum class Precedence {
   Call,       // myFunction(X)
 };
 
+static const std::map<TokenType, Precedence> precedences{
+    {TokenType::EQ, Precedence::Equals},
+    {TokenType::NotEq, Precedence::Equals},
+    {TokenType::LT, Precedence::LessGreater},
+    {TokenType::GT, Precedence::LessGreater},
+    {TokenType::Plus, Precedence::Sum},
+    {TokenType::Minus, Precedence::Sum},
+    {TokenType::Asterisk, Precedence::Product},
+    {TokenType::Slash, Precedence::Product},
+};
+
 Parser::Parser(std::string input) : m_lexer{std::move(input)} {
   next_token();
   next_token();
@@ -28,6 +40,15 @@ Parser::Parser(std::string input) : m_lexer{std::move(input)} {
   register_prefix(TokenType::Int, [this] { return this->parse_integer_literal(); });
   register_prefix(TokenType::Bang, [this] { return this->parse_prefix_expression(); });
   register_prefix(TokenType::Minus, [this] { return this->parse_prefix_expression(); });
+
+  register_infix(TokenType::Plus, [this](auto&& expr) { return this->parse_infix_expression(std::move(expr)); });
+  register_infix(TokenType::Minus, [this](auto&& expr) { return this->parse_infix_expression(std::move(expr)); });
+  register_infix(TokenType::Slash, [this](auto&& expr) { return this->parse_infix_expression(std::move(expr)); });
+  register_infix(TokenType::Asterisk, [this](auto&& expr) { return this->parse_infix_expression(std::move(expr)); });
+  register_infix(TokenType::EQ, [this](auto&& expr) { return this->parse_infix_expression(std::move(expr)); });
+  register_infix(TokenType::NotEq, [this](auto&& expr) { return this->parse_infix_expression(std::move(expr)); });
+  register_infix(TokenType::LT, [this](auto&& expr) { return this->parse_infix_expression(std::move(expr)); });
+  register_infix(TokenType::GT, [this](auto&& expr) { return this->parse_infix_expression(std::move(expr)); });
 }
 
 auto Parser::parse_program() -> Program {
@@ -114,6 +135,17 @@ auto Parser::parse_expression(Precedence precedence) -> std::unique_ptr<Expressi
   }
 
   auto left_expr = prefix->second();
+
+  while (!peek_token_is(TokenType::Semicolon) && precedence < peek_precedence()) {
+    const auto infix = m_infix_parse_fns.find(m_peek_token.type());
+    if (infix == m_infix_parse_fns.end()) {
+      return left_expr;
+    }
+
+    next_token();
+    left_expr = infix->second(std::move(left_expr));
+  }
+
   return left_expr;
 }
 
@@ -126,6 +158,18 @@ auto Parser::parse_prefix_expression() -> std::unique_ptr<Expression> {
   auto right = parse_expression(Precedence::Prefix);
 
   return std::make_unique<PrefixExpression>(token, std::move(literal), std::move(right));
+}
+
+auto Parser::parse_infix_expression(std::unique_ptr<Expression>&& left) -> std::unique_ptr<Expression> {
+  auto token = m_cur_token;
+  auto&& op = token.literal();
+  auto precedence = cur_precedence();
+
+  next_token();
+
+  auto&& right = parse_expression(precedence);
+
+  return std::make_unique<InfixExpression>(token, std::move(op), std::move(left), std::move(right));
 }
 
 auto Parser::parse_identifier() -> std::unique_ptr<Expression> {
@@ -143,12 +187,28 @@ auto Parser::parse_integer_literal() const -> std::unique_ptr<Expression> {
   }
 }
 
-auto Parser::cur_token_is(const TokenType t_type) const -> bool {
+auto Parser::cur_token_is(const TokenType t_type) const noexcept -> bool {
   return m_cur_token.type() == t_type;
 }
 
-auto Parser::peek_token_is(const TokenType t_type) const -> bool {
+auto Parser::peek_token_is(const TokenType t_type) const noexcept -> bool {
   return m_peek_token.type() == t_type;
+}
+
+auto Parser::peek_precedence() const noexcept -> Precedence {
+  try {
+    return precedences.at(m_peek_token.type());
+  } catch (const std::out_of_range&) {
+    return Precedence::Lowest;
+  }
+}
+
+auto Parser::cur_precedence() const noexcept -> Precedence {
+  try {
+    return precedences.at(m_cur_token.type());
+  } catch (const std::out_of_range&) {
+    return Precedence::Lowest;
+  }
 }
 
 auto Parser::expect_peek(const TokenType t_type) -> bool {

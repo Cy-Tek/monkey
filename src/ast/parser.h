@@ -14,7 +14,7 @@ class ExpressionStatement;
 
 enum class Precedence;
 
-using InfixParseFn = std::function<std::unique_ptr<Expression>(Expression&&)>;
+using InfixParseFn = std::function<std::unique_ptr<Expression>(std::unique_ptr<Expression>&&)>;
 using PrefixParseFn = std::function<std::unique_ptr<Expression>()>;
 
 class Parser {
@@ -42,11 +42,14 @@ class Parser {
 
   [[nodiscard]] auto parse_expression(Precedence) -> std::unique_ptr<Expression>;
   [[nodiscard]] auto parse_prefix_expression() -> std::unique_ptr<Expression>;
+  [[nodiscard]] auto parse_infix_expression(std::unique_ptr<Expression>&&) -> std::unique_ptr<Expression>;
   [[nodiscard]] auto parse_identifier() -> std::unique_ptr<Expression>;
   [[nodiscard]] auto parse_integer_literal() const -> std::unique_ptr<Expression>;
 
-  [[nodiscard]] auto cur_token_is(TokenType) const -> bool;
-  [[nodiscard]] auto peek_token_is(TokenType) const -> bool;
+  [[nodiscard]] auto cur_token_is(TokenType) const noexcept -> bool;
+  [[nodiscard]] auto peek_token_is(TokenType) const noexcept -> bool;
+  [[nodiscard]] auto peek_precedence() const noexcept -> Precedence;
+  [[nodiscard]] auto cur_precedence() const noexcept -> Precedence;
 
   auto expect_peek(TokenType) -> bool;
   auto peek_error(TokenType) -> void;
