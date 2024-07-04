@@ -1,0 +1,5 @@
+CompileFlags:
+  Remove:
+  - '-std=g++23'
+  Add:
+  - '-std=c++2b'
