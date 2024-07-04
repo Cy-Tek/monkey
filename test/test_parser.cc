@@ -1,10 +1,11 @@
 #include "ast.h"
+#include "expression_statement.h"
 #include "integer_literal.h"
 #include "let_statement.h"
 #include "parser.h"
+#include "prefix_expression.h"
 #include "return_statement.h"
 
-#include <expression_statement.h>
 #include <gtest/gtest.h>
 #include <iostream>
 
@@ -123,10 +124,10 @@ TEST(Parser, IntegerExpression) {
   const auto& statements = program.statements();
   EXPECT_EQ(statements.size(), 1);
 
-  const auto expr = dynamic_cast<ast::ExpressionStatement*>(statements[0].get());
-  EXPECT_NE(expr, nullptr);
+  const auto stmt = dynamic_cast<ast::ExpressionStatement*>(statements[0].get());
+  EXPECT_NE(stmt, nullptr);
 
-  const auto& int_literal = dynamic_cast<ast::IntegerLiteral&>(expr->value());
+  const auto& int_literal = dynamic_cast<ast::IntegerLiteral&>(stmt->value());
   EXPECT_EQ(int_literal.value(), 5);
   EXPECT_EQ(int_literal.token_literal(), "5");
 }
@@ -150,5 +151,44 @@ TEST(Parser, PrefixExpressions) {
 
     const auto& statements = program.statements();
     EXPECT_EQ(statements.size(), 1);
+
+    const auto stmt = dynamic_cast<ast::ExpressionStatement*>(statements[0].get());
+    EXPECT_NE(stmt, nullptr);
+
+    const auto& expr = dynamic_cast<ast::PrefixExpression&>(stmt->value());
+    EXPECT_EQ(expr.op(), test.prefix_operator);
+
+    auto& int_literal = dynamic_cast<const ast::IntegerLiteral&>(expr.right());
+    EXPECT_EQ(int_literal.value(), test.integer_value);
+    EXPECT_EQ(int_literal.token_literal(), std::format("{}", test.integer_value));
+  }
+}
+
+TEST(Parser, InfixExpressions) {
+  struct Test {
+    std::string input;
+    uint64_t left_value;
+    std::string op;
+    uint64_t right_value;
+  };
+
+  const auto tests = std::vector<Test>{
+      {"5 + 5;", 5, "+", 5},
+      {"5 - 5;", 5, "-", 5},
+      {"5 * 5;", 5, "*", 5},
+      {"5 / 5;", 5, "/", 5},
+      {"5 > 5;", 5, ">", 5},
+      {"5 < 5;", 5, "<", 5},
+      {"5 == 5;", 5, "==", 5},
+      {"5 != 5;", 5, "!=", 5},
+  };
+
+  for (const auto& test : tests) {
+    auto parser = ast::Parser{test.input};
+    auto program = parser.parse_program();
+    check_parser_errors(parser);
+
+    auto& statements = program.statements();
+    ASSERT_EQ(statements.size(), 1);
   }
 }
