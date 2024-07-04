@@ -107,6 +107,6 @@ auto to_string(TokenType type) -> std::string_view {
   return "undefined";
 }
 
-auto operator<<(std::ostream& os, TokenType token_type) -> std::ostream& {
+auto operator<<(std::ostream& os, const TokenType token_type) -> std::ostream& {
   return os << to_string(token_type);
 }
