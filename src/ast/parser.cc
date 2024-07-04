@@ -164,14 +164,14 @@ auto Parser::expect_peek(const TokenType t_type) -> bool {
 auto Parser::peek_error(const TokenType t_type) -> void {
   auto msg = std::format(
       "Expected next token to be {}, got {} instead",
-      tokenTypeToString(t_type),
-      tokenTypeToString(m_peek_token.type()));
+      to_string(t_type),
+      to_string(m_peek_token.type()));
 
   m_errors.push_back(std::move(msg));
 }
 
 auto Parser::no_prefix_parse_fn_error(const TokenType t_type) -> void {
-  auto msg = std::format("No prefix parse function for {} found", tokenTypeToString(t_type));
+  auto msg = std::format("No prefix parse function for {} found", to_string(t_type));
   m_errors.push_back(std::move(msg));
 }
 

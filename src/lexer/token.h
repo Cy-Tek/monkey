@@ -45,7 +45,7 @@ enum class TokenType {
 };
 
 auto lookupIdent(const std::string& ident) -> TokenType;
-auto tokenTypeToString(TokenType type) -> std::string_view;
+auto to_string(TokenType type) -> std::string_view;
 
 auto operator<<(std::ostream& os, TokenType token_type) -> std::ostream&;
 
@@ -67,4 +67,3 @@ class Token {
   TokenType m_type;
   std::string m_literal;
 };
-
