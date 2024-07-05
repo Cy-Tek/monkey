@@ -2,9 +2,9 @@
 
 namespace ast {
 
-LetStatement::LetStatement(Token token, Identifier name, std::unique_ptr<Expression> value)
-    : m_token{std::move(token)},
-      m_name{std::move(name)},
+LetStatement::LetStatement(Token token, Identifier name,
+                           std::unique_ptr<Expression> value)
+    : m_token{std::move(token)}, m_name{std::move(name)},
       m_value{std::move(value)} {}
 
 auto LetStatement::token_literal() const -> std::string {
@@ -14,9 +14,7 @@ auto LetStatement::token_literal() const -> std::string {
 auto LetStatement::debug_print(std::ostream& os) const -> void {
   os << token_literal() << " " << name() << " = ";
 
-  if (m_value) {
-    os << *m_value;
-  }
+  if (m_value) { os << *m_value; }
 
   os << ";";
 }
@@ -33,4 +31,4 @@ auto LetStatement::value() const -> const Expression* {
   return m_value.get();
 }
 
-}// namespace ast
+} // namespace ast

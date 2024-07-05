@@ -2,9 +2,9 @@
 
 namespace ast {
 
-PrefixExpression::PrefixExpression(Token token, std::string op, std::unique_ptr<Expression>&& right)
-    : m_token{std::move(token)},
-      m_operator{std::move(op)},
+PrefixExpression::PrefixExpression(Token token, std::string op,
+                                   std::unique_ptr<Expression>&& right)
+    : m_token{std::move(token)}, m_operator{std::move(op)},
       m_right(std::move(right)) {}
 
 auto PrefixExpression::token() const -> const Token& {
@@ -29,4 +29,4 @@ auto PrefixExpression::token_literal() const -> std::string {
   return m_token.literal();
 }
 
-}// namespace ast
+} // namespace ast

@@ -1,66 +1,48 @@
-# Generated from CLion C/C++ Code Style settings
+# Base style configuration derived from the LLVM coding standards.
 BasedOnStyle: LLVM
-AccessModifierOffset: -1
-AlignAfterOpenBracket: Align
-AlignConsecutiveAssignments: None
-AlignOperands: DontAlign
-AllowAllArgumentsOnNextLine: false
-AllowAllConstructorInitializersOnNextLine: false
-AllowAllParametersOfDeclarationOnNextLine: false
-AllowShortBlocksOnASingleLine: Always
-AllowShortCaseLabelsOnASingleLine: true
-AllowShortFunctionsOnASingleLine: All
-AllowShortIfStatementsOnASingleLine: AllIfsAndElse
-AllowShortLambdasOnASingleLine: All
-AllowShortLoopsOnASingleLine: true
-AlwaysBreakAfterReturnType: None
-AlwaysBreakTemplateDeclarations: Yes
-BreakBeforeBraces: Custom
-BraceWrapping:
-  AfterCaseLabel: false
-  AfterClass: false
-  AfterControlStatement: Never
-  AfterEnum: false
-  AfterFunction: false
-  AfterNamespace: false
-  AfterUnion: false
-  BeforeCatch: false
-  BeforeElse: false
-  IndentBraces: false
-  SplitEmptyFunction: false
-  SplitEmptyRecord: false
-BreakBeforeBinaryOperators: NonAssignment
-BreakBeforeTernaryOperators: true
-BreakConstructorInitializers: BeforeColon
-BreakInheritanceList: BeforeColon
-ColumnLimit: 0
-CompactNamespaces: false
-ContinuationIndentWidth: 4
-IndentCaseLabels: true
-IndentPPDirectives: None
+# Here, the indentation width is set to 2 spaces.
 IndentWidth: 2
-KeepEmptyLinesAtTheStartOfBlocks: true
-MaxEmptyLinesToKeep: 1
+# Continuing lines will align with the opening delimiter.
+AlignAfterOpenBracket: Align
+# Align consecutive assignments.
+AlignConsecutiveAssignments: true
+# Align consecutive declarations.
+AlignConsecutiveDeclarations: true
+# Aligns escaped newlines as far left as possible.
+AlignEscapedNewlines: Left
+# Allow short blocks on a single line.
+AllowShortBlocksOnASingleLine: true
+# Allow short case labels on a single line.
+AllowShortCaseLabelsOnASingleLine: true
+# Allow short functions on a single line.
+AllowShortFunctionsOnASingleLine: Inline
+# Allow short if statements on a single line.
+AllowShortIfStatementsOnASingleLine: true
+# Allow short loops on a single line.
+AllowShortLoopsOnASingleLine: true
+# Set to false to not indent namespaces.
 NamespaceIndentation: None
-ObjCSpaceAfterProperty: false
-ObjCSpaceBeforeProtocolList: false
+# The column limit for each line.
+ColumnLimit: 80
+# Penalty for breaking a function call after call.
+PenaltyBreakBeforeFirstCallParameter: 19
+# Penalty for each line break introduced inside a comment.
+PenaltyBreakComment: 300
+# Penalty for breaking before the first template parameter.
+PenaltyBreakFirstLessLess: 120
+# Controls the formatting of braces. Use 'Attach' to attach braces to surrounding context.
+BreakBeforeBraces: Attach
+# Indent preprocessor directives at the start of a line.
+IndentPPDirectives: None
+# Whether to indent preprocessor directives inside of `#if` sections.
+#PPIndentWidth: 2
+# Ensure the alignment of operands in assignments and comparisons is taken into account.
+AlignOperands: true
+# Sort includes.
+SortIncludes: true
+# Set pointer and reference alignment style.
 PointerAlignment: Left
-ReflowComments: false
-SpaceAfterCStyleCast: true
-SpaceAfterLogicalNot: false
-SpaceAfterTemplateKeyword: false
-SpaceBeforeAssignmentOperators: true
-SpaceBeforeCpp11BracedList: false
-SpaceBeforeCtorInitializerColon: true
-SpaceBeforeInheritanceColon: true
-SpaceBeforeParens: ControlStatements
-SpaceBeforeRangeBasedForLoopColon: true
-SpaceInEmptyParentheses: false
-SpacesBeforeTrailingComments: 0
-SpacesInAngles: Never
-SpacesInCStyleCastParentheses: false
-SpacesInContainerLiterals: false
-SpacesInParentheses: false
-SpacesInSquareBrackets: false
-TabWidth: 4
+# The maximum number of consecutive empty lines to keep.
+MaxEmptyLinesToKeep: 1
+# Use tabs only for indentation.
 UseTab: Never

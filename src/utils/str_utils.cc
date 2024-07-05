@@ -17,22 +17,22 @@ auto is_ascii_digit(char ch) -> bool {
   return ch >= '0' && ch <= '9';
 }
 
-auto trim_left(std::string &str) -> void {
-  str.erase(str.begin(), std::find_if(str.begin(), str.end(), [](unsigned char ch) {
-              return !std::isspace(ch);
-            }));
+auto trim_left(std::string& str) -> void {
+  str.erase(str.begin(),
+            std::find_if(str.begin(), str.end(),
+                         [](unsigned char ch) { return !std::isspace(ch); }));
 }
 
-auto trim_right(std::string &str) -> void {
-  str.erase(std::find_if(str.rbegin(), str.rend(), [](unsigned char ch) {
-              return !std::isspace(ch);
-            }).base(),
+auto trim_right(std::string& str) -> void {
+  str.erase(std::find_if(str.rbegin(), str.rend(),
+                         [](unsigned char ch) { return !std::isspace(ch); })
+                .base(),
             str.end());
 }
 
-auto trim(std::string &str) -> void {
+auto trim(std::string& str) -> void {
   trim_left(str);
   trim_right(str);
 }
 
-}// namespace utils
+} // namespace utils

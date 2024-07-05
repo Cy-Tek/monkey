@@ -4,8 +4,7 @@
 namespace ast {
 
 ReturnStatement::ReturnStatement(Token token, std::unique_ptr<Expression> value)
-    : m_token{std::move(token)},
-      m_return_value{std::move(value)} {}
+    : m_token{std::move(token)}, m_return_value{std::move(value)} {}
 
 auto ReturnStatement::token_literal() const -> std::string {
   return m_token.literal();
@@ -14,9 +13,7 @@ auto ReturnStatement::token_literal() const -> std::string {
 auto ReturnStatement::debug_print(std::ostream& os) const -> void {
   os << token_literal() << " ";
 
-  if (m_return_value) {
-    os << *m_return_value;
-  }
+  if (m_return_value) { os << *m_return_value; }
 
   os << ";";
 }
@@ -29,4 +26,4 @@ auto ReturnStatement::Value() const -> const Expression& {
   return *m_return_value.get();
 }
 
-}// namespace ast
+} // namespace ast

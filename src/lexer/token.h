@@ -50,20 +50,20 @@ auto to_string(TokenType type) -> std::string_view;
 auto operator<<(std::ostream& os, TokenType token_type) -> std::ostream&;
 
 class Token {
- public:
+public:
   Token();
   Token(TokenType type, std::string literal);
 
   Token(Token&& other) noexcept;
   auto operator=(Token&& other) noexcept -> Token&;
 
-  Token(Token const& other) = default;
+  Token(Token const& other)                    = default;
   auto operator=(Token const& other) -> Token& = default;
 
   [[nodiscard]] auto type() const -> TokenType;
   [[nodiscard]] auto literal() const -> const std::string&;
 
- private:
-  TokenType m_type;
+private:
+  TokenType   m_type;
   std::string m_literal;
 };

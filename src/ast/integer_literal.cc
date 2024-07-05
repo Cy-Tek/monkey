@@ -21,4 +21,4 @@ auto IntegerLiteral::value() const -> int64_t {
   return m_value;
 }
 
-}// namespace ast
+} // namespace ast

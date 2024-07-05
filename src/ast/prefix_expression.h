@@ -6,7 +6,7 @@
 namespace ast {
 
 class PrefixExpression : public Expression {
- public:
+public:
   PrefixExpression() = default;
   PrefixExpression(Token, std::string, std::unique_ptr<Expression>&&);
 
@@ -14,13 +14,13 @@ class PrefixExpression : public Expression {
   [[nodiscard]] auto op() const -> const std::string&;
   [[nodiscard]] auto right() const -> const Expression&;
 
-  auto debug_print(std::ostream&) const -> void override;
+  auto               debug_print(std::ostream&) const -> void override;
   [[nodiscard]] auto token_literal() const -> std::string override;
 
- private:
-  Token m_token;
-  std::string m_operator;
+private:
+  Token                       m_token;
+  std::string                 m_operator;
   std::unique_ptr<Expression> m_right;
 };
 
-}// namespace ast
+} // namespace ast

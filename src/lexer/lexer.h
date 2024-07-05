@@ -5,22 +5,22 @@ class Token;
 namespace lexer {
 
 class Lexer {
- public:
+public:
   Lexer() = delete;
   explicit Lexer(std::string input);
 
-  Lexer(const Lexer&) = delete;
-  Lexer(Lexer&&) = delete;
+  Lexer(const Lexer&)                    = delete;
+  Lexer(Lexer&&)                         = delete;
   auto operator=(const Lexer&) -> Lexer& = delete;
-  auto operator=(Lexer&&) -> Lexer& = delete;
+  auto operator=(Lexer&&) -> Lexer&      = delete;
 
   auto next_token() -> Token;
 
- private:
+private:
   std::string m_input;
-  size_t m_position = 0;
-  size_t m_read_position = 0;
-  char m_ch = 0;
+  size_t      m_position      = 0;
+  size_t      m_read_position = 0;
+  char        m_ch            = 0;
 
   auto read_char() -> void;
   auto read_number() -> std::string;
@@ -31,4 +31,4 @@ class Lexer {
   auto skip_whitespace() -> void;
 };
 
-}// namespace lexer
+} // namespace lexer

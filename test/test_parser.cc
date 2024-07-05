@@ -23,7 +23,8 @@ auto check_parser_errors(const ast::Parser& parser) -> void {
 
 // ── Let statements ──────────────────────────────────────────────────
 
-auto test_let_statement(ast::Statement* statement, const std::string& name) -> void {
+auto test_let_statement(ast::Statement*    statement,
+                        const std::string& name) -> void {
   EXPECT_NE(statement, nullptr);
   EXPECT_EQ(statement->token_literal(), "let");
 
@@ -40,7 +41,7 @@ TEST(Parser, LetStatement) {
     let foobar = 838383;
   )";
 
-  auto parser = ast::Parser{input};
+  auto parser  = ast::Parser{input};
   auto program = parser.parse_program();
 
   check_parser_errors(parser);
@@ -74,8 +75,8 @@ TEST(Parser, ReturnStatement) {
     return 993322;
   )";
 
-  auto parser = ast::Parser{input};
-  auto program = parser.parse_program();
+  auto        parser     = ast::Parser{input};
+  auto        program    = parser.parse_program();
   const auto& statements = program.statements();
 
   check_parser_errors(parser);
@@ -91,7 +92,8 @@ TEST(Parser, ReturnStatement) {
 }
 
 TEST(Parser, ToDebugString) {
-  auto ident = ast::Identifier{Token{TokenType::Ident, "anotherVal"}, "anotherVar"};
+  auto ident =
+      ast::Identifier{Token{TokenType::Ident, "anotherVal"}, "anotherVar"};
 }
 
 //  ── Expressions tests ───────────────────────────────────────────────
@@ -99,14 +101,15 @@ TEST(Parser, ToDebugString) {
 TEST(Parser, IdentifierExpression) {
   const auto input = "foobar;";
 
-  auto parser = ast::Parser{input};
+  auto parser  = ast::Parser{input};
   auto program = parser.parse_program();
   check_parser_errors(parser);
 
   const auto& statements = program.statements();
   EXPECT_EQ(statements.size(), 1);
 
-  const auto expr = dynamic_cast<ast::ExpressionStatement*>(statements[0].get());
+  const auto expr =
+      dynamic_cast<ast::ExpressionStatement*>(statements[0].get());
   EXPECT_NE(expr, nullptr);
 
   const auto& ident = dynamic_cast<ast::Identifier&>(expr->value());
@@ -117,14 +120,15 @@ TEST(Parser, IdentifierExpression) {
 TEST(Parser, IntegerExpression) {
   const auto input = "5;";
 
-  auto parser = ast::Parser{input};
+  auto parser  = ast::Parser{input};
   auto program = parser.parse_program();
   check_parser_errors(parser);
 
   const auto& statements = program.statements();
   EXPECT_EQ(statements.size(), 1);
 
-  const auto stmt = dynamic_cast<ast::ExpressionStatement*>(statements[0].get());
+  const auto stmt =
+      dynamic_cast<ast::ExpressionStatement*>(statements[0].get());
   EXPECT_NE(stmt, nullptr);
 
   const auto& int_literal = dynamic_cast<ast::IntegerLiteral&>(stmt->value());
@@ -136,7 +140,7 @@ TEST(Parser, PrefixExpressions) {
   struct Test {
     std::string input;
     std::string prefix_operator;
-    int64_t integer_value;
+    int64_t     integer_value;
   };
 
   const auto tests = std::vector<Test>{
@@ -145,14 +149,15 @@ TEST(Parser, PrefixExpressions) {
   };
 
   for (const auto& test : tests) {
-    auto parser = ast::Parser{test.input};
+    auto parser  = ast::Parser{test.input};
     auto program = parser.parse_program();
     check_parser_errors(parser);
 
     const auto& statements = program.statements();
     EXPECT_EQ(statements.size(), 1);
 
-    const auto stmt = dynamic_cast<ast::ExpressionStatement*>(statements[0].get());
+    const auto stmt =
+        dynamic_cast<ast::ExpressionStatement*>(statements[0].get());
     EXPECT_NE(stmt, nullptr);
 
     const auto& expr = dynamic_cast<ast::PrefixExpression&>(stmt->value());
@@ -160,31 +165,27 @@ TEST(Parser, PrefixExpressions) {
 
     auto& int_literal = dynamic_cast<const ast::IntegerLiteral&>(expr.right());
     EXPECT_EQ(int_literal.value(), test.integer_value);
-    EXPECT_EQ(int_literal.token_literal(), std::format("{}", test.integer_value));
+    EXPECT_EQ(int_literal.token_literal(),
+              std::format("{}", test.integer_value));
   }
 }
 
 TEST(Parser, InfixExpressions) {
   struct Test {
     std::string input;
-    uint64_t left_value;
+    uint64_t    left_value;
     std::string op;
-    uint64_t right_value;
+    uint64_t    right_value;
   };
 
   const auto tests = std::vector<Test>{
-      {"5 + 5;", 5, "+", 5},
-      {"5 - 5;", 5, "-", 5},
-      {"5 * 5;", 5, "*", 5},
-      {"5 / 5;", 5, "/", 5},
-      {"5 > 5;", 5, ">", 5},
-      {"5 < 5;", 5, "<", 5},
-      {"5 == 5;", 5, "==", 5},
-      {"5 != 5;", 5, "!=", 5},
+      {"5 + 5;", 5, "+", 5},   {"5 - 5;", 5, "-", 5},   {"5 * 5;", 5, "*", 5},
+      {"5 / 5;", 5, "/", 5},   {"5 > 5;", 5, ">", 5},   {"5 < 5;", 5, "<", 5},
+      {"5 == 5;", 5, "==", 5}, {"5 != 5;", 5, "!=", 5},
   };
 
   for (const auto& test : tests) {
-    auto parser = ast::Parser{test.input};
+    auto parser  = ast::Parser{test.input};
     auto program = parser.parse_program();
     check_parser_errors(parser);
 
@@ -216,13 +217,13 @@ TEST(Parser, OperatorPrecedenceParsing) {
 
   auto ss = std::ostringstream{};
   for (const auto& test : tests) {
-    auto parser = ast::Parser(test.input);
+    auto parser  = ast::Parser(test.input);
     auto program = parser.parse_program();
     check_parser_errors(parser);
 
     program.debug_print(ss);
     EXPECT_EQ(ss.str(), test.expected);
 
-    ss.str("");// reset the string stream to have no input
+    ss.str(""); // reset the string stream to have no input
   }
 }

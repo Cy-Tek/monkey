@@ -3,8 +3,7 @@
 namespace ast {
 
 Identifier::Identifier(Token token, std::string value)
-    : m_token{std::move(token)},
-      m_value{std::move(value)} {}
+    : m_token{std::move(token)}, m_value{std::move(value)} {}
 
 auto Identifier::token_literal() const -> std::string {
   auto tok_literal = m_token.literal();
@@ -23,4 +22,4 @@ auto Identifier::value() const -> const std::string& {
   return m_value;
 }
 
-}// namespace ast
+} // namespace ast
