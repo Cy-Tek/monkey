@@ -1,6 +1,5 @@
 #include "expression_statement.h"
 
-#include "identifier.h"
 #include "token.h"
 
 namespace ast {
