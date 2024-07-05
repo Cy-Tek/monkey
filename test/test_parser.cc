@@ -192,3 +192,37 @@ TEST(Parser, InfixExpressions) {
     ASSERT_EQ(statements.size(), 1);
   }
 }
+
+TEST(Parser, OperatorPrecedenceParsing) {
+  struct Test {
+    std::string input;
+    std::string expected;
+  };
+
+  const auto tests = std::vector<Test>{
+      {"-a * b", "((-a) * b)"},
+      {"!-a", "(!(-a))"},
+      {"a + b + c", "((a + b) + c)"},
+      {"a + b - c", "((a + b) - c)"},
+      {"a * b * c", "((a * b) * c)"},
+      {"a * b / c", "((a * b) / c)"},
+      {"a + b / c", "(a + (b / c))"},
+      {"a + b * c + d / e - f", "(((a + (b * c)) + (d / e)) - f)"},
+      {"3 + 4; -5 * 5", "(3 + 4)((-5) * 5)"},
+      {"5 > 4 == 3 < 4", "((5 > 4) == (3 < 4))"},
+      {"5 < 4 != 3 > 4", "((5 < 4) != (3 > 4))"},
+      {"3 + 4 * 5 == 3 * 1 + 4 * 5", "((3 + (4 * 5)) == ((3 * 1) + (4 * 5)))"},
+  };
+
+  auto ss = std::ostringstream{};
+  for (const auto& test : tests) {
+    auto parser = ast::Parser(test.input);
+    auto program = parser.parse_program();
+    check_parser_errors(parser);
+
+    program.debug_print(ss);
+    EXPECT_EQ(ss.str(), test.expected);
+
+    ss.str("");// reset the string stream to have no input
+  }
+}
