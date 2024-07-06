@@ -1,5 +1,6 @@
 #include "parser.h"
 
+#include "boolean_literal.h"
 #include "expression_statement.h"
 #include "identifier.h"
 #include "infix_expression.h"
@@ -40,6 +41,10 @@ Parser::Parser(std::string input) : m_lexer{std::move(input)} {
                   [this] { return this->parse_identifier(); });
   register_prefix(TokenType::Int,
                   [this] { return this->parse_integer_literal(); });
+  register_prefix(TokenType::False,
+                  [this] { return this->parse_boolean_literal(); });
+  register_prefix(TokenType::True,
+                  [this] { return this->parse_boolean_literal(); });
   register_prefix(TokenType::Bang,
                   [this] { return this->parse_prefix_expression(); });
   register_prefix(TokenType::Minus,
@@ -197,6 +202,11 @@ auto Parser::parse_integer_literal() const -> std::unique_ptr<Expression> {
     const auto value = std::stoi(token.literal());
     return std::make_unique<IntegerLiteral>(token, value);
   } catch (std::invalid_argument&) { return nullptr; }
+}
+
+auto Parser::parse_boolean_literal() const -> std::unique_ptr<Expression> {
+  return std::make_unique<BooleanLiteral>(m_cur_token,
+                                          cur_token_is(TokenType::True));
 }
 
 auto Parser::cur_token_is(const TokenType t_type) const noexcept -> bool {

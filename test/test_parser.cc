@@ -222,7 +222,7 @@ TEST(Parser, OperatorPrecedenceParsing) {
     check_parser_errors(parser);
 
     program.debug_print(ss);
-    EXPECT_EQ(ss.str(), test.expected);
+    EXPECT_EQ(ss.view(), test.expected);
 
     ss.str(""); // reset the string stream to have no input
   }

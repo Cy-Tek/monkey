@@ -58,6 +58,9 @@ private:
   [[nodiscard]]
   auto parse_integer_literal() const -> std::unique_ptr<Expression>;
 
+  [[nodiscard]]
+  auto parse_boolean_literal() const -> std::unique_ptr<Expression>;
+
   [[nodiscard]] auto cur_token_is(TokenType) const noexcept -> bool;
   [[nodiscard]] auto peek_token_is(TokenType) const noexcept -> bool;
   [[nodiscard]] auto peek_precedence() const noexcept -> Precedence;
