@@ -10,7 +10,7 @@ public:
   Identifier() = default;
   Identifier(Token token, std::string value);
 
-  Identifier(Identifier&& other) noexcept                    = default;
+       Identifier(Identifier&& other) noexcept               = default;
   auto operator=(Identifier&& other) noexcept -> Identifier& = default;
 
   [[nodiscard]] auto token_literal() const -> std::string override;
