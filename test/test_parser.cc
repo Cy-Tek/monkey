@@ -1,5 +1,7 @@
 #include "ast.h"
+#include "boolean_literal.h"
 #include "expression_statement.h"
+#include "infix_expression.h"
 #include "integer_literal.h"
 #include "let_statement.h"
 #include "parser.h"
@@ -23,8 +25,8 @@ auto check_parser_errors(const ast::Parser& parser) -> void {
 
 // ── Let statements ──────────────────────────────────────────────────
 
-auto test_let_statement(ast::Statement*    statement,
-                        const std::string& name) -> void {
+auto test_let_statement(ast::Statement* statement, const std::string& name)
+    -> void {
   EXPECT_NE(statement, nullptr);
   EXPECT_EQ(statement->token_literal(), "let");
 

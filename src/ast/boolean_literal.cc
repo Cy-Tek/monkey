@@ -2,7 +2,7 @@
 
 namespace ast {
 
-BooleanLiteral::BooleanLiteral(Token token, bool value)
+BooleanLiteral::BooleanLiteral(Token token, const bool value)
     : m_token(std::move(token)), m_value(value) {}
 
 auto BooleanLiteral::debug_print(std::ostream& os) const -> void {

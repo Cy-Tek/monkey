@@ -19,7 +19,7 @@ public:
 
 private:
   Token m_token;
-  bool  m_value;
+  bool  m_value{false};
 };
 
 } // namespace ast
