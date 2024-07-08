@@ -11,7 +11,8 @@ public:
   IntegerLiteral() = default;
   IntegerLiteral(Token, int64_t);
 
-  auto               debug_print(std::ostream&) const -> void override;
+  auto debug_print(std::ostream&) const -> void override;
+
   [[nodiscard]] auto token_literal() const -> std::string override;
 
   [[nodiscard]] auto token() const -> const Token&;

@@ -10,9 +10,9 @@ public:
   ExpressionStatement() = default;
   ExpressionStatement(Token, std::unique_ptr<Expression>&&);
 
-  [[nodiscard]] auto token_literal() const -> std::string override;
-
   auto debug_print(std::ostream&) const -> void override;
+
+  [[nodiscard]] auto token_literal() const -> std::string override;
 
   [[nodiscard]] auto token() const -> const Token&;
   [[nodiscard]] auto value() const -> Expression&;

@@ -11,8 +11,9 @@ public:
   LetStatement() = default;
   LetStatement(Token, Identifier, std::unique_ptr<Expression>);
 
+  auto debug_print(std::ostream&) const -> void override;
+
   [[nodiscard]] auto token_literal() const -> std::string override;
-  auto               debug_print(std::ostream&) const -> void override;
 
   [[nodiscard]] auto name() const -> const Identifier&;
   [[nodiscard]] auto token() const -> const Token&;

@@ -24,9 +24,9 @@ public:
 
   explicit Parser(std::string);
 
-       Parser(Parser&)                = delete;
+  Parser(Parser&)                     = delete;
   auto operator=(Parser) -> Parser&   = delete;
-       Parser(Parser&&)               = delete;
+  Parser(Parser&&)                    = delete;
   auto operator=(Parser&&) -> Parser& = delete;
 
   auto parse_program() -> Program;
@@ -41,8 +41,8 @@ private:
   auto parse_return_statement() -> std::unique_ptr<ReturnStatement>;
   auto parse_expression_statement() -> std::unique_ptr<ExpressionStatement>;
 
-  [[nodiscard]] auto parse_expression(Precedence)
-      -> std::unique_ptr<Expression>;
+  [[nodiscard]] auto
+      parse_expression(Precedence) -> std::unique_ptr<Expression>;
 
   [[nodiscard]] auto parse_prefix_expression() -> std::unique_ptr<Expression>;
 
@@ -51,11 +51,11 @@ private:
 
   [[nodiscard]] auto parse_identifier() -> std::unique_ptr<Expression>;
 
-  [[nodiscard]] auto parse_integer_literal() const
-      -> std::unique_ptr<Expression>;
+  [[nodiscard]] auto
+  parse_integer_literal() const -> std::unique_ptr<Expression>;
 
-  [[nodiscard]] auto parse_boolean_literal() const
-      -> std::unique_ptr<Expression>;
+  [[nodiscard]] auto
+  parse_boolean_literal() const -> std::unique_ptr<Expression>;
 
   [[nodiscard]] auto cur_token_is(TokenType) const noexcept -> bool;
   [[nodiscard]] auto peek_token_is(TokenType) const noexcept -> bool;

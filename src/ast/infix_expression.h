@@ -11,8 +11,9 @@ public:
   InfixExpression(Token, std::string, std::unique_ptr<Expression>&&,
                   std::unique_ptr<Expression>&&);
 
+  auto debug_print(std::ostream&) const -> void override;
+
   [[nodiscard]] auto token_literal() const -> std::string override;
-  auto               debug_print(std::ostream&) const -> void override;
 
   [[nodiscard]] auto token() const noexcept -> const Token&;
   [[nodiscard]] auto op() const noexcept -> std::string_view;
