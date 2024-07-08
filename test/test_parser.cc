@@ -23,10 +23,65 @@ auto check_parser_errors(const ast::Parser& parser) -> void {
   }
 }
 
+auto test_identifier(const ast::Expression& expr, std::string value) -> void {
+  auto& ident = dynamic_cast<const ast::Identifier&>(expr);
+
+  EXPECT_EQ(ident.value(), value);
+  EXPECT_EQ(ident.token_literal(), value);
+}
+
+auto test_integer_literal(const ast::Expression& expr, int64_t value) -> void {
+  auto& literal = dynamic_cast<const ast::IntegerLiteral&>(expr);
+
+  EXPECT_EQ(literal.value(), value);
+  EXPECT_EQ(literal.token_literal(), std::to_string(value));
+}
+
+auto test_bool_literal(const ast::Expression& expr, bool value) -> void {
+  auto& literal = dynamic_cast<const ast::BooleanLiteral&>(expr);
+
+  EXPECT_EQ(literal.value(), value);
+
+  if (value)
+    EXPECT_EQ(literal.token_literal(), "true");
+  else
+    EXPECT_EQ(literal.token_literal(), "false");
+}
+
+auto test_literal_expression(const ast::Expression& expr,
+                             auto&&                 expected) -> void {
+  using T = std::decay_t<decltype(expected)>;
+
+  if constexpr (std::is_same_v<T, int>) {
+    test_integer_literal(expr, static_cast<int64_t>(expected));
+    return;
+  } else if constexpr (std::is_same_v<T, int64_t>) {
+    test_integer_literal(expr, expected);
+    return;
+  } else if constexpr (std::is_same_v<T, bool>) {
+    test_bool_literal(expr, expected);
+    return;
+  } else if constexpr (std::is_same_v<T, std::string>(expected)) {
+    test_identifier(expr, expected);
+    return;
+  }
+
+  FAIL() << "Type of expr not handled: got " << typeid(T).name();
+}
+
+auto test_infix_expression(const ast::Expression& expression, auto&& left,
+                           std::string op, auto&& right) -> void {
+  const auto& expr = dynamic_cast<const ast::InfixExpression&>(expression);
+
+  test_literal_expression(expr.left(), left);
+  test_literal_expression(expr.right(), right);
+  EXPECT_EQ(expr.op(), op);
+}
+
 // ── Let statements ──────────────────────────────────────────────────
 
-auto test_let_statement(ast::Statement* statement, const std::string& name)
-    -> void {
+auto test_let_statement(ast::Statement*    statement,
+                        const std::string& name) -> void {
   EXPECT_NE(statement, nullptr);
   EXPECT_EQ(statement->token_literal(), "let");
 
@@ -165,34 +220,67 @@ TEST(Parser, PrefixExpressions) {
     const auto& expr = dynamic_cast<ast::PrefixExpression&>(stmt->value());
     EXPECT_EQ(expr.op(), test.prefix_operator);
 
-    auto& int_literal = dynamic_cast<const ast::IntegerLiteral&>(expr.right());
-    EXPECT_EQ(int_literal.value(), test.integer_value);
-    EXPECT_EQ(int_literal.token_literal(),
-              std::format("{}", test.integer_value));
+    test_integer_literal(expr.right(), test.integer_value);
   }
 }
 
 TEST(Parser, InfixExpressions) {
-  struct Test {
+  struct IntTest {
     std::string input;
-    uint64_t    left_value;
+    int64_t     left_value;
     std::string op;
-    uint64_t    right_value;
+    int64_t     right_value;
   };
 
-  const auto tests = std::vector<Test>{
+  struct BoolTest {
+    std::string input;
+    bool        left_value;
+    std::string op;
+    bool        right_value;
+  };
+
+  const auto int_tests = std::vector<IntTest>{
       {"5 + 5;", 5, "+", 5},   {"5 - 5;", 5, "-", 5},   {"5 * 5;", 5, "*", 5},
       {"5 / 5;", 5, "/", 5},   {"5 > 5;", 5, ">", 5},   {"5 < 5;", 5, "<", 5},
       {"5 == 5;", 5, "==", 5}, {"5 != 5;", 5, "!=", 5},
   };
 
-  for (const auto& test : tests) {
+  const auto bool_tests = std::vector<BoolTest>{
+      {"true == true", true, "==", true},
+      {"true == false", true, "==", false},
+      {"false == false", false, "==", false},
+  };
+
+  for (const auto& test : int_tests) {
     auto parser  = ast::Parser{test.input};
     auto program = parser.parse_program();
     check_parser_errors(parser);
 
     auto& statements = program.statements();
     ASSERT_EQ(statements.size(), 1);
+
+    const auto stmt =
+        dynamic_cast<ast::ExpressionStatement*>(statements[0].get());
+    EXPECT_NE(stmt, nullptr);
+
+    test_infix_expression(stmt->value(), test.left_value, test.op,
+                          test.right_value);
+  }
+
+  for (const auto& test : bool_tests) {
+    auto parser  = ast::Parser{test.input};
+    auto program = parser.parse_program();
+    check_parser_errors(parser);
+
+    auto& statements = program.statements();
+    ASSERT_EQ(statements.size(), 1);
+
+    const auto stmt =
+        dynamic_cast<ast::ExpressionStatement*>(statements[0].get());
+    EXPECT_NE(stmt, nullptr);
+
+    test_infix_expression(stmt->value(), test.left_value, test.op,
+                          test.right_value);
   }
 }
 
@@ -215,6 +303,10 @@ TEST(Parser, OperatorPrecedenceParsing) {
       {"5 > 4 == 3 < 4", "((5 > 4) == (3 < 4))"},
       {"5 < 4 != 3 > 4", "((5 < 4) != (3 > 4))"},
       {"3 + 4 * 5 == 3 * 1 + 4 * 5", "((3 + (4 * 5)) == ((3 * 1) + (4 * 5)))"},
+      {"true", "true"},
+      {"false", "false"},
+      {"3 > 5 == false", "((3 > 5) == false)"},
+      {"3 < 5 == true", "((3 < 5) == true)"},
   };
 
   auto ss = std::ostringstream{};
@@ -223,8 +315,8 @@ TEST(Parser, OperatorPrecedenceParsing) {
     auto program = parser.parse_program();
     check_parser_errors(parser);
 
-    program.debug_print(ss);
-    EXPECT_EQ(ss.view(), test.expected);
+    ss << program;
+    EXPECT_EQ(ss.str(), test.expected);
 
     ss.str(""); // reset the string stream to have no input
   }
