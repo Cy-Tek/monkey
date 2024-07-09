@@ -49,6 +49,8 @@ Parser::Parser(std::string input) : m_lexer{std::move(input)} {
                   [this] { return this->parse_prefix_expression(); });
   register_prefix(TokenType::Minus,
                   [this] { return this->parse_prefix_expression(); });
+  register_prefix(TokenType::LParen,
+                  [this] { return this->parse_grouped_expression(); });
 
   register_infix(TokenType::Plus, [this](auto&& expr) {
     return this->parse_infix_expression(std::move(expr));
@@ -189,6 +191,15 @@ auto Parser::parse_infix_expression(std::unique_ptr<Expression>&& left)
 
   return std::make_unique<InfixExpression>(token, std::move(op),
                                            std::move(left), std::move(right));
+}
+
+auto Parser::parse_grouped_expression() -> std::unique_ptr<Expression> {
+  next_token();
+
+  auto exp = parse_expression(Precedence::Lowest);
+  if (!expect_peek(TokenType::RParen)) { return nullptr; }
+
+  return exp;
 }
 
 auto Parser::parse_identifier() -> std::unique_ptr<Expression> {

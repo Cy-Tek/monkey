@@ -49,6 +49,7 @@ private:
   [[nodiscard]] auto parse_infix_expression(std::unique_ptr<Expression>&&)
       -> std::unique_ptr<Expression>;
 
+  [[nodiscard]] auto parse_grouped_expression() -> std::unique_ptr<Expression>;
   [[nodiscard]] auto parse_identifier() -> std::unique_ptr<Expression>;
 
   [[nodiscard]] auto
