@@ -3,7 +3,7 @@
 namespace ast {
 
 LetStatement::LetStatement(Token token, Identifier name,
-                           std::unique_ptr<Expression> value)
+                           OwnedExpression value)
     : m_token{std::move(token)}, m_name{std::move(name)},
       m_value{std::move(value)} {}
 

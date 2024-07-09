@@ -9,7 +9,7 @@ namespace ast {
 class LetStatement : public Statement {
 public:
   LetStatement() = default;
-  LetStatement(Token, Identifier, std::unique_ptr<Expression>);
+  LetStatement(Token, Identifier, OwnedExpression);
 
   auto debug_print(std::ostream&) const -> void override;
 
@@ -22,7 +22,7 @@ public:
 private:
   Token                       m_token;
   Identifier                  m_name;
-  std::unique_ptr<Expression> m_value;
+  OwnedExpression m_value;
 };
 
 } // namespace ast

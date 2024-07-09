@@ -8,7 +8,7 @@ namespace ast {
 class ReturnStatement : public Statement {
 public:
   ReturnStatement() = default;
-  ReturnStatement(Token token, std::unique_ptr<Expression> value);
+  ReturnStatement(Token token, OwnedExpression value);
 
   auto debug_print(std::ostream&) const -> void override;
 
@@ -19,7 +19,7 @@ public:
 
 private:
   Token                       m_token{};
-  std::unique_ptr<Expression> m_return_value{nullptr};
+  OwnedExpression m_return_value{nullptr};
 };
 
 } // namespace ast

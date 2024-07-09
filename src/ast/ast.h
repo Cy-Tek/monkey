@@ -40,4 +40,8 @@ public:
   auto operator=(const Expression&) -> Expression& = delete;
 };
 
+using OwnedNode       = std::unique_ptr<Node>;
+using OwnedStatement  = std::unique_ptr<Statement>;
+using OwnedExpression = std::unique_ptr<Expression>;
+
 } // namespace ast

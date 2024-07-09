@@ -14,9 +14,9 @@ class ExpressionStatement;
 
 enum class Precedence;
 
-using PrefixParseFn = std::function<std::unique_ptr<Expression>()>;
+using PrefixParseFn = std::function<OwnedExpression()>;
 using InfixParseFn =
-    std::function<std::unique_ptr<Expression>(std::unique_ptr<Expression>&&)>;
+    std::function<OwnedExpression(OwnedExpression&&)>;
 
 class Parser {
 public:
@@ -36,27 +36,27 @@ public:
 private:
   auto next_token() -> void;
 
-  auto parse_statement() -> std::unique_ptr<Statement>;
+  auto parse_statement() -> OwnedStatement;
   auto parse_let_statement() -> std::unique_ptr<LetStatement>;
   auto parse_return_statement() -> std::unique_ptr<ReturnStatement>;
   auto parse_expression_statement() -> std::unique_ptr<ExpressionStatement>;
 
   [[nodiscard]] auto
-      parse_expression(Precedence) -> std::unique_ptr<Expression>;
+      parse_expression(Precedence) -> OwnedExpression;
 
-  [[nodiscard]] auto parse_prefix_expression() -> std::unique_ptr<Expression>;
+  [[nodiscard]] auto parse_prefix_expression() -> OwnedExpression;
 
-  [[nodiscard]] auto parse_infix_expression(std::unique_ptr<Expression>&&)
-      -> std::unique_ptr<Expression>;
+  [[nodiscard]] auto parse_infix_expression(OwnedExpression&&)
+      -> OwnedExpression;
 
-  [[nodiscard]] auto parse_grouped_expression() -> std::unique_ptr<Expression>;
-  [[nodiscard]] auto parse_identifier() -> std::unique_ptr<Expression>;
-
-  [[nodiscard]] auto
-  parse_integer_literal() const -> std::unique_ptr<Expression>;
+  [[nodiscard]] auto parse_grouped_expression() -> OwnedExpression;
+  [[nodiscard]] auto parse_identifier() -> OwnedExpression;
 
   [[nodiscard]] auto
-  parse_boolean_literal() const -> std::unique_ptr<Expression>;
+  parse_integer_literal() const -> OwnedExpression;
+
+  [[nodiscard]] auto
+  parse_boolean_literal() const -> OwnedExpression;
 
   [[nodiscard]] auto cur_token_is(TokenType) const noexcept -> bool;
   [[nodiscard]] auto peek_token_is(TokenType) const noexcept -> bool;

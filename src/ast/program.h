@@ -15,11 +15,11 @@ public:
 
   [[nodiscard]] auto token_literal() const -> std::string override;
 
-  auto statements() -> std::vector<std::unique_ptr<Statement>>&;
-  auto add_statement(std::unique_ptr<Statement> statement) -> void;
+  auto statements() -> std::vector<OwnedStatement>&;
+  auto add_statement(OwnedStatement statement) -> void;
 
 private:
-  std::vector<std::unique_ptr<Statement>> m_statements{};
+  std::vector<OwnedStatement> m_statements{};
 };
 
 } // namespace ast

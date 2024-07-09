@@ -5,8 +5,8 @@
 namespace ast {
 
 InfixExpression::InfixExpression(Token token, std::string op,
-                                 std::unique_ptr<Expression>&& left,
-                                 std::unique_ptr<Expression>&& right)
+                                 OwnedExpression&& left,
+                                 OwnedExpression&& right)
     : m_token{std::move(token)}, m_op{std::move(op)}, m_left{std::move(left)},
       m_right{std::move(right)} {}
 

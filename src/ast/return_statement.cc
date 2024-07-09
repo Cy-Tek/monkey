@@ -3,7 +3,7 @@
 
 namespace ast {
 
-ReturnStatement::ReturnStatement(Token token, std::unique_ptr<Expression> value)
+ReturnStatement::ReturnStatement(Token token, OwnedExpression value)
     : m_token{std::move(token)}, m_return_value{std::move(value)} {}
 
 auto ReturnStatement::token_literal() const -> std::string {

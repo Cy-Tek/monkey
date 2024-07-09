@@ -12,11 +12,11 @@ auto Program::debug_print(std::ostream& os) const -> void {
   for (const auto& statement : m_statements) { os << *statement; }
 }
 
-auto Program::statements() -> std::vector<std::unique_ptr<Statement>>& {
+auto Program::statements() -> std::vector<OwnedStatement>& {
   return m_statements;
 }
 
-auto Program::add_statement(std::unique_ptr<Statement> statement) -> void {
+auto Program::add_statement(OwnedStatement statement) -> void {
   m_statements.push_back(std::move(statement));
 }
 

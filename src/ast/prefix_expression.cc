@@ -3,7 +3,7 @@
 namespace ast {
 
 PrefixExpression::PrefixExpression(Token token, std::string op,
-                                   std::unique_ptr<Expression>&& right)
+                                   OwnedExpression&& right)
     : m_token{std::move(token)}, m_operator{std::move(op)},
       m_right(std::move(right)) {}
 

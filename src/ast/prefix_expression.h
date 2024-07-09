@@ -8,7 +8,7 @@ namespace ast {
 class PrefixExpression : public Expression {
 public:
   PrefixExpression() = default;
-  PrefixExpression(Token, std::string, std::unique_ptr<Expression>&&);
+  PrefixExpression(Token, std::string, OwnedExpression&&);
 
   auto debug_print(std::ostream&) const -> void override;
 
@@ -21,7 +21,7 @@ public:
 private:
   Token                       m_token;
   std::string                 m_operator;
-  std::unique_ptr<Expression> m_right;
+  OwnedExpression m_right;
 };
 
 } // namespace ast

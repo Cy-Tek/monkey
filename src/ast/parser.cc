@@ -101,7 +101,7 @@ auto Parser::next_token() -> void {
   m_peek_token = m_lexer.next_token();
 }
 
-auto Parser::parse_statement() -> std::unique_ptr<Statement> {
+auto Parser::parse_statement() -> OwnedStatement {
   switch (m_cur_token.type()) {
   case TokenType::Let: return parse_let_statement();
   case TokenType::Return: return parse_return_statement();
@@ -146,7 +146,7 @@ auto Parser::parse_expression_statement()
 }
 
 auto Parser::parse_expression(Precedence precedence)
-    -> std::unique_ptr<Expression> {
+    -> OwnedExpression {
   const auto prefix = m_prefix_parse_fns.find(m_cur_token.type());
   if (prefix == m_prefix_parse_fns.end()) {
     no_prefix_parse_fn_error(m_cur_token.type());
@@ -167,7 +167,7 @@ auto Parser::parse_expression(Precedence precedence)
   return left_expr;
 }
 
-auto Parser::parse_prefix_expression() -> std::unique_ptr<Expression> {
+auto Parser::parse_prefix_expression() -> OwnedExpression {
   auto token   = m_cur_token;
   auto literal = token.literal();
 
@@ -179,8 +179,8 @@ auto Parser::parse_prefix_expression() -> std::unique_ptr<Expression> {
                                             std::move(right));
 }
 
-auto Parser::parse_infix_expression(std::unique_ptr<Expression>&& left)
-    -> std::unique_ptr<Expression> {
+auto Parser::parse_infix_expression(OwnedExpression&& left)
+    -> OwnedExpression {
   auto   token      = m_cur_token;
   auto&& op         = token.literal();
   auto   precedence = cur_precedence();
@@ -193,7 +193,7 @@ auto Parser::parse_infix_expression(std::unique_ptr<Expression>&& left)
                                            std::move(left), std::move(right));
 }
 
-auto Parser::parse_grouped_expression() -> std::unique_ptr<Expression> {
+auto Parser::parse_grouped_expression() -> OwnedExpression {
   next_token();
 
   auto exp = parse_expression(Precedence::Lowest);
@@ -202,11 +202,11 @@ auto Parser::parse_grouped_expression() -> std::unique_ptr<Expression> {
   return exp;
 }
 
-auto Parser::parse_identifier() -> std::unique_ptr<Expression> {
+auto Parser::parse_identifier() -> OwnedExpression {
   return std::make_unique<Identifier>(m_cur_token, m_cur_token.literal());
 }
 
-auto Parser::parse_integer_literal() const -> std::unique_ptr<Expression> {
+auto Parser::parse_integer_literal() const -> OwnedExpression {
   const auto token = m_cur_token;
 
   try {
@@ -215,7 +215,7 @@ auto Parser::parse_integer_literal() const -> std::unique_ptr<Expression> {
   } catch (std::invalid_argument&) { return nullptr; }
 }
 
-auto Parser::parse_boolean_literal() const -> std::unique_ptr<Expression> {
+auto Parser::parse_boolean_literal() const -> OwnedExpression {
   return std::make_unique<BooleanLiteral>(m_cur_token,
                                           cur_token_is(TokenType::True));
 }
