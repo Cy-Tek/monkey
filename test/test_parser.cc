@@ -13,6 +13,8 @@
 
 // ── Utility function ────────────────────────────────────────────────
 
+using Scalar = std::variant<int64_t, bool>;
+
 auto check_parser_errors(const ast::Parser& parser) -> void {
   const auto& errors = parser.errors();
 
@@ -50,23 +52,35 @@ auto test_bool_literal(const ast::Expression& expr, bool value) -> void {
 
 auto test_literal_expression(const ast::Expression& expr,
                              auto&&                 expected) -> void {
-  using T = std::decay_t<decltype(expected)>;
+  std::visit(
+      [&expr](auto&& arg) {
+        using T = std::decay_t<decltype(arg)>;
 
-  if constexpr (std::is_same_v<T, int>) {
-    test_integer_literal(expr, static_cast<int64_t>(expected));
-    return;
-  } else if constexpr (std::is_same_v<T, int64_t>) {
-    test_integer_literal(expr, expected);
-    return;
-  } else if constexpr (std::is_same_v<T, bool>) {
-    test_bool_literal(expr, expected);
-    return;
-  } else if constexpr (std::is_same_v<T, std::string>(expected)) {
-    test_identifier(expr, expected);
-    return;
-  }
+        if constexpr (std::is_same_v<T, int>) {
+          test_integer_literal(expr, static_cast<int64_t>(arg));
+          return;
+        } else if constexpr (std::is_same_v<T, int64_t>) {
+          test_integer_literal(expr, arg);
+          return;
+        } else if constexpr (std::is_same_v<T, bool>) {
+          test_bool_literal(expr, arg);
+          return;
+        } else if constexpr (std::is_same_v<T, std::string>(arg)) {
+          test_identifier(expr, arg);
+          return;
+        }
 
-  FAIL() << "Type of expr not handled: got " << typeid(T).name();
+        FAIL() << "Type of expr not handled: got " << typeid(T).name();
+      },
+      expected);
+}
+
+auto test_prefix_expression(const ast::Expression& expression, std::string op,
+                            auto&& right) -> void {
+  const auto& expr = dynamic_cast<const ast::PrefixExpression&>(expression);
+
+  test_literal_expression(expr.right(), right);
+  EXPECT_EQ(expr.op(), op);
 }
 
 auto test_infix_expression(const ast::Expression& expression, auto&& left,
@@ -197,12 +211,14 @@ TEST(Parser, PrefixExpressions) {
   struct Test {
     std::string input;
     std::string prefix_operator;
-    int64_t     integer_value;
+    Scalar      value;
   };
 
   const auto tests = std::vector<Test>{
       {"!5;", "!", 5},
       {"-15;", "-", 15},
+      {"!true", "!", true},
+      {"!false", "!", false},
   };
 
   for (const auto& test : tests) {
@@ -217,57 +233,33 @@ TEST(Parser, PrefixExpressions) {
         dynamic_cast<ast::ExpressionStatement*>(statements[0].get());
     EXPECT_NE(stmt, nullptr);
 
-    const auto& expr = dynamic_cast<ast::PrefixExpression&>(stmt->value());
-    EXPECT_EQ(expr.op(), test.prefix_operator);
-
-    test_integer_literal(expr.right(), test.integer_value);
+    test_prefix_expression(stmt->value(), test.prefix_operator, test.value);
   }
 }
 
 TEST(Parser, InfixExpressions) {
-  struct IntTest {
+  struct Test {
     std::string input;
-    int64_t     left_value;
+    Scalar      left_value;
     std::string op;
-    int64_t     right_value;
+    Scalar      right_value;
   };
 
-  struct BoolTest {
-    std::string input;
-    bool        left_value;
-    std::string op;
-    bool        right_value;
-  };
-
-  const auto int_tests = std::vector<IntTest>{
-      {"5 + 5;", 5, "+", 5},   {"5 - 5;", 5, "-", 5},   {"5 * 5;", 5, "*", 5},
-      {"5 / 5;", 5, "/", 5},   {"5 > 5;", 5, ">", 5},   {"5 < 5;", 5, "<", 5},
-      {"5 == 5;", 5, "==", 5}, {"5 != 5;", 5, "!=", 5},
-  };
-
-  const auto bool_tests = std::vector<BoolTest>{
+  const auto tests = std::vector<Test>{
+      {"5 + 5;", 5, "+", 5},
+      {"5 - 5;", 5, "-", 5},
+      {"5 * 5;", 5, "*", 5},
+      {"5 / 5;", 5, "/", 5},
+      {"5 > 5;", 5, ">", 5},
+      {"5 < 5;", 5, "<", 5},
+      {"5 == 5;", 5, "==", 5},
+      {"5 != 5;", 5, "!=", 5},
       {"true == true", true, "==", true},
       {"true == false", true, "==", false},
       {"false == false", false, "==", false},
   };
 
-  for (const auto& test : int_tests) {
-    auto parser  = ast::Parser{test.input};
-    auto program = parser.parse_program();
-    check_parser_errors(parser);
-
-    auto& statements = program.statements();
-    ASSERT_EQ(statements.size(), 1);
-
-    const auto stmt =
-        dynamic_cast<ast::ExpressionStatement*>(statements[0].get());
-    EXPECT_NE(stmt, nullptr);
-
-    test_infix_expression(stmt->value(), test.left_value, test.op,
-                          test.right_value);
-  }
-
-  for (const auto& test : bool_tests) {
+  for (const auto& test : tests) {
     auto parser  = ast::Parser{test.input};
     auto program = parser.parse_program();
     check_parser_errors(parser);
