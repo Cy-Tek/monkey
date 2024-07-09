@@ -4,8 +4,7 @@
 
 namespace ast {
 
-ExpressionStatement::ExpressionStatement(Token                         token,
-                                         OwnedExpression&& value)
+ExpressionStatement::ExpressionStatement(Token token, OwnedExpression&& value)
     : m_token{std::move(token)}, m_value(std::move(value)) {}
 
 auto ExpressionStatement::token_literal() const -> std::string {

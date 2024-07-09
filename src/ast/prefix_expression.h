@@ -19,8 +19,8 @@ public:
   [[nodiscard]] auto right() const -> const Expression&;
 
 private:
-  Token                       m_token;
-  std::string                 m_operator;
+  Token           m_token;
+  std::string     m_operator;
   OwnedExpression m_right;
 };
 

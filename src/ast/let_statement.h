@@ -20,8 +20,8 @@ public:
   [[nodiscard]] auto value() const -> const Expression*;
 
 private:
-  Token                       m_token;
-  Identifier                  m_name;
+  Token           m_token;
+  Identifier      m_name;
   OwnedExpression m_value;
 };
 

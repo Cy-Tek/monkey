@@ -145,8 +145,7 @@ auto Parser::parse_expression_statement()
   return std::make_unique<ExpressionStatement>(token, std::move(expression));
 }
 
-auto Parser::parse_expression(Precedence precedence)
-    -> OwnedExpression {
+auto Parser::parse_expression(Precedence precedence) -> OwnedExpression {
   const auto prefix = m_prefix_parse_fns.find(m_cur_token.type());
   if (prefix == m_prefix_parse_fns.end()) {
     no_prefix_parse_fn_error(m_cur_token.type());
@@ -179,8 +178,7 @@ auto Parser::parse_prefix_expression() -> OwnedExpression {
                                             std::move(right));
 }
 
-auto Parser::parse_infix_expression(OwnedExpression&& left)
-    -> OwnedExpression {
+auto Parser::parse_infix_expression(OwnedExpression&& left) -> OwnedExpression {
   auto   token      = m_cur_token;
   auto&& op         = token.literal();
   auto   precedence = cur_precedence();

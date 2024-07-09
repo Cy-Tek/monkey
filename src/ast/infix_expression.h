@@ -8,8 +8,7 @@ namespace ast {
 class InfixExpression : public Expression {
 public:
   InfixExpression() = delete;
-  InfixExpression(Token, std::string, OwnedExpression&&,
-                  OwnedExpression&&);
+  InfixExpression(Token, std::string, OwnedExpression&&, OwnedExpression&&);
 
   auto debug_print(std::ostream&) const -> void override;
 
@@ -21,8 +20,8 @@ public:
   [[nodiscard]] auto right() const noexcept -> const Expression&;
 
 private:
-  Token                       m_token;
-  std::string                 m_op;
+  Token           m_token;
+  std::string     m_op;
   OwnedExpression m_left;
   OwnedExpression m_right;
 };

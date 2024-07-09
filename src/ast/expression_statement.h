@@ -18,7 +18,7 @@ public:
   [[nodiscard]] auto value() const -> Expression&;
 
 private:
-  Token                       m_token{};
+  Token           m_token{};
   OwnedExpression m_value{nullptr};
 };
 

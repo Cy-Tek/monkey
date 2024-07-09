@@ -7,7 +7,7 @@ namespace ast {
 
 class IfExpression : public Expression {
 private:
-  Token                       m_token;
+  Token           m_token;
   OwnedExpression condition;
 };
 
